@@ -1,4 +1,4 @@
-.idea
-.DS_Store
-dataset/*/*
-!dataset/*/util.py
+**/.idea/
+**/.DS_Store
+**/dataset/*/*
+!**/dataset/*/util.py

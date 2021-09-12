@@ -1,0 +1,229 @@
+2021-09-12 21:35:25,913 - INFO - cli - Parameters: Namespace(adam_epsilon=1e-08, alpha=0.9999, cache_dir='', data_dir='../../../../method/ptuning/dataset/clone_detection/java_train_32_test', dev32_examples=-1, do_eval=True, do_train=True, early_stop=-1, embed_size=768, eval_every_step=50, eval_examples=-1, eval_set='dev', freeze_plm=False, learning_rate=1e-05, logging_steps=50, max_grad_norm=1.0, model_name_or_path='microsoft/codebert-base', model_type='roberta', no_cuda=False, output_dir='../../../output/clone_detection/ptuning/java_train_32_test', overwrite_output_dir=True, pattern_ids=[10], pet_gradient_accumulation_steps=1, pet_max_seq_length=512, pet_max_steps=100, pet_num_train_epochs=3, pet_per_gpu_eval_batch_size=16, pet_per_gpu_train_batch_size=5, pet_repetitions=1, prompt_encoder_type='lstm', seed=42, show_limit=0, split_examples_evenly=False, task_name='clonedet', train_examples=-1, warmup_steps=0, weight_decay=0.1)
+2021-09-12 21:35:25,976 - INFO - task_processors - Creating features from dataset file at ../../../../method/ptuning/dataset/clone_detection/java_train_32_test (num_examples=-1, set_type=train)
+2021-09-12 21:35:25,977 - INFO - task_processors - Returning 32 train examples with label dist.: [('False', 16), ('True', 16)]
+2021-09-12 21:35:25,977 - INFO - task_processors - Creating features from dataset file at ../../../../method/ptuning/dataset/clone_detection/java_train_32_test (num_examples=-1, set_type=dev)
+2021-09-12 21:35:25,977 - INFO - task_processors - Returning 32 dev examples with label dist.: [('False', 16), ('True', 16)]
+2021-09-12 21:35:25,977 - INFO - task_processors - Creating features from dataset file at ../../../../method/ptuning/dataset/clone_detection/java_train_32_test (num_examples=-1, set_type=dev32)
+2021-09-12 21:35:25,977 - INFO - task_processors - Returning 32 dev32 examples with label dist.: [('False', 16), ('True', 16)]
+2021-09-12 21:35:25,978 - WARNING - modeling - Path ../../../output/clone_detection/ptuning/java_train_32_test/p10-i0 already exists, deleting it...
+Some weights of RobertaForMaskedLM were not initialized from the model checkpoint at microsoft/codebert-base and are newly initialized: ['lm_head.layer_norm.bias', 'lm_head.dense.weight', 'lm_head.layer_norm.weight', 'lm_head.decoder.bias', 'lm_head.dense.bias', 'lm_head.decoder.weight', 'lm_head.bias']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+2021-09-12 21:35:44,273 - INFO - wrapper - 
+====================
+Parameter total: 150684249, trainable: 150684249
+====================
+2021-09-12 21:35:44,275 - INFO - wrapper - dev32_data performance before training.
+Evaluating:   0%|          | 0/1 [00:00<?, ?it/s]Evaluating: 100%|██████████| 1/1 [00:02<00:00,  2.80s/it]Evaluating: 100%|██████████| 1/1 [00:02<00:00,  2.80s/it]
+2021-09-12 21:35:47,158 - INFO - wrapper - {'acc': 0.5}
+2021-09-12 21:35:47,158 - INFO - wrapper - eval_data performance before training.
+Evaluating:   0%|          | 0/1 [00:00<?, ?it/s]Evaluating: 100%|██████████| 1/1 [00:01<00:00,  1.07s/it]Evaluating: 100%|██████████| 1/1 [00:01<00:00,  1.07s/it]
+2021-09-12 21:35:48,285 - INFO - wrapper - {'acc': 0.5}
+Epoch:   0%|          | 0/26 [00:00<?, ?it/s]
+Iteration:   0%|          | 0/4 [00:00<?, ?it/s][A
+Iteration:  25%|██▌       | 1/4 [00:01<00:03,  1.13s/it][A
+Iteration:  50%|█████     | 2/4 [00:02<00:02,  1.11s/it][A
+Iteration:  75%|███████▌  | 3/4 [00:03<00:01,  1.09s/it][A
+Iteration: 100%|██████████| 4/4 [00:03<00:00,  1.06it/s][AIteration: 100%|██████████| 4/4 [00:03<00:00,  1.04it/s]
+Epoch:   4%|▍         | 1/26 [00:03<01:35,  3.84s/it]
+Iteration:   0%|          | 0/4 [00:00<?, ?it/s][A
+Iteration:  25%|██▌       | 1/4 [00:01<00:03,  1.05s/it][A
+Iteration:  50%|█████     | 2/4 [00:02<00:02,  1.05s/it][A
+Iteration:  75%|███████▌  | 3/4 [00:03<00:01,  1.05s/it][A
+Iteration: 100%|██████████| 4/4 [00:03<00:00,  1.09it/s][AIteration: 100%|██████████| 4/4 [00:03<00:00,  1.07it/s]
+Epoch:   8%|▊         | 2/26 [00:07<01:31,  3.81s/it]
+Iteration:   0%|          | 0/4 [00:00<?, ?it/s][A
+Iteration:  25%|██▌       | 1/4 [00:01<00:03,  1.05s/it][A
+Iteration:  50%|█████     | 2/4 [00:02<00:02,  1.05s/it][A
+Iteration:  75%|███████▌  | 3/4 [00:03<00:01,  1.05s/it][A
+Iteration: 100%|██████████| 4/4 [00:03<00:00,  1.09it/s][AIteration: 100%|██████████| 4/4 [00:03<00:00,  1.07it/s]
+Epoch:  12%|█▏        | 3/26 [00:11<01:27,  3.80s/it]
+Iteration:   0%|          | 0/4 [00:00<?, ?it/s][A
+Iteration:  25%|██▌       | 1/4 [00:01<00:03,  1.05s/it][A
+Iteration:  50%|█████     | 2/4 [00:02<00:02,  1.05s/it][A
+Iteration:  75%|███████▌  | 3/4 [00:03<00:01,  1.06s/it][A
+Iteration: 100%|██████████| 4/4 [00:03<00:00,  1.09it/s][AIteration: 100%|██████████| 4/4 [00:03<00:00,  1.07it/s]
+Epoch:  15%|█▌        | 4/26 [00:15<01:23,  3.78s/it]
+Iteration:   0%|          | 0/4 [00:00<?, ?it/s][A
+Iteration:  25%|██▌       | 1/4 [00:01<00:03,  1.06s/it][A
+Iteration:  50%|█████     | 2/4 [00:02<00:02,  1.06s/it][A
+Iteration:  75%|███████▌  | 3/4 [00:03<00:01,  1.06s/it][A
+Iteration: 100%|██████████| 4/4 [00:03<00:00,  1.09it/s][AIteration: 100%|██████████| 4/4 [00:03<00:00,  1.06it/s]
+Epoch:  19%|█▉        | 5/26 [00:18<01:19,  3.78s/it]
+Iteration:   0%|          | 0/4 [00:00<?, ?it/s][A
+Iteration:  25%|██▌       | 1/4 [00:01<00:03,  1.05s/it][A
+Iteration:  50%|█████     | 2/4 [00:02<00:02,  1.06s/it][A
+Iteration:  75%|███████▌  | 3/4 [00:03<00:01,  1.06s/it][A
+Iteration: 100%|██████████| 4/4 [00:03<00:00,  1.09it/s][AIteration: 100%|██████████| 4/4 [00:03<00:00,  1.06it/s]
+Epoch:  23%|██▎       | 6/26 [00:22<01:15,  3.77s/it]
+Iteration:   0%|          | 0/4 [00:00<?, ?it/s][A
+Iteration:  25%|██▌       | 1/4 [00:01<00:03,  1.05s/it][A
+Iteration:  50%|█████     | 2/4 [00:02<00:02,  1.05s/it][A
+Iteration:  75%|███████▌  | 3/4 [00:03<00:01,  1.06s/it][A
+Iteration: 100%|██████████| 4/4 [00:03<00:00,  1.09it/s][AIteration: 100%|██████████| 4/4 [00:03<00:00,  1.07it/s]
+Epoch:  27%|██▋       | 7/26 [00:26<01:11,  3.77s/it]
+Iteration:   0%|          | 0/4 [00:00<?, ?it/s][A
+Iteration:  25%|██▌       | 1/4 [00:01<00:03,  1.05s/it][A
+Iteration:  50%|█████     | 2/4 [00:02<00:02,  1.06s/it][A
+Iteration:  75%|███████▌  | 3/4 [00:03<00:01,  1.05s/it][A
+Iteration: 100%|██████████| 4/4 [00:03<00:00,  1.10it/s][AIteration: 100%|██████████| 4/4 [00:03<00:00,  1.07it/s]
+Epoch:  31%|███       | 8/26 [00:30<01:07,  3.76s/it]
+Iteration:   0%|          | 0/4 [00:00<?, ?it/s][A
+Iteration:  25%|██▌       | 1/4 [00:01<00:03,  1.06s/it][A
+Iteration:  50%|█████     | 2/4 [00:02<00:02,  1.06s/it][A
+Iteration:  75%|███████▌  | 3/4 [00:03<00:01,  1.06s/it][A
+Iteration: 100%|██████████| 4/4 [00:03<00:00,  1.09it/s][AIteration: 100%|██████████| 4/4 [00:03<00:00,  1.06it/s]
+Epoch:  35%|███▍      | 9/26 [00:33<01:03,  3.76s/it]
+Iteration:   0%|          | 0/4 [00:00<?, ?it/s][A
+Iteration:  25%|██▌       | 1/4 [00:01<00:03,  1.05s/it][A
+Iteration:  50%|█████     | 2/4 [00:02<00:02,  1.06s/it][A
+Iteration:  75%|███████▌  | 3/4 [00:03<00:01,  1.06s/it][A
+Iteration: 100%|██████████| 4/4 [00:03<00:00,  1.09it/s][AIteration: 100%|██████████| 4/4 [00:03<00:00,  1.06it/s]
+Epoch:  38%|███▊      | 10/26 [00:37<01:00,  3.76s/it]
+Iteration:   0%|          | 0/4 [00:00<?, ?it/s][A
+Iteration:  25%|██▌       | 1/4 [00:01<00:03,  1.05s/it][A
+Iteration:  50%|█████     | 2/4 [00:02<00:02,  1.06s/it][A
+Iteration:  75%|███████▌  | 3/4 [00:03<00:01,  1.06s/it][A
+Iteration: 100%|██████████| 4/4 [00:03<00:00,  1.09it/s][AIteration: 100%|██████████| 4/4 [00:03<00:00,  1.07it/s]
+Epoch:  42%|████▏     | 11/26 [00:41<00:56,  3.76s/it]
+Iteration:   0%|          | 0/4 [00:00<?, ?it/s][A
+Iteration:  25%|██▌       | 1/4 [00:01<00:03,  1.06s/it][A
+Iteration:  50%|█████     | 2/4 [00:02<00:02,  1.06s/it][A
+Iteration:  75%|███████▌  | 3/4 [00:03<00:01,  1.06s/it][A
+Iteration: 100%|██████████| 4/4 [00:03<00:00,  1.09it/s][AIteration: 100%|██████████| 4/4 [00:03<00:00,  1.07it/s]
+Epoch:  46%|████▌     | 12/26 [00:45<00:52,  3.76s/it]
+Iteration:   0%|          | 0/4 [00:00<?, ?it/s][A
+Iteration:  25%|██▌       | 1/4 [00:01<00:03,  1.06s/it][A/home/user/anaconda3/envs/ptuning/lib/python3.8/site-packages/torch/optim/lr_scheduler.py:231: UserWarning: To get the last learning rate computed by the scheduler, please use `get_last_lr()`.
+  warnings.warn("To get the last learning rate computed by the scheduler, "
+
+
+Evaluating:   0%|          | 0/1 [00:00<?, ?it/s][A[A
+
+Evaluating: 100%|██████████| 1/1 [00:01<00:00,  1.16s/it][A[AEvaluating: 100%|██████████| 1/1 [00:01<00:00,  1.16s/it]
+2021-09-12 21:36:36,839 - INFO - wrapper - Saving trained model at ../../../output/clone_detection/ptuning/java_train_32_test/p10-i0...
+2021-09-12 21:36:36,839 - INFO - wrapper - best_dev32_acc: 0.5000 | best_global_step: 50
+2021-09-12 21:36:36,839 - INFO - wrapper - Saving models.
+
+Iteration:  50%|█████     | 2/4 [00:03<00:03,  1.62s/it][A
+Iteration:  75%|███████▌  | 3/4 [00:05<00:01,  1.45s/it][A
+Iteration: 100%|██████████| 4/4 [00:05<00:00,  1.19s/it][AIteration: 100%|██████████| 4/4 [00:05<00:00,  1.41s/it]
+Epoch:  50%|█████     | 13/26 [00:50<00:56,  4.32s/it]
+Iteration:   0%|          | 0/4 [00:00<?, ?it/s][A
+Iteration:  25%|██▌       | 1/4 [00:01<00:03,  1.06s/it][A
+Iteration:  50%|█████     | 2/4 [00:02<00:02,  1.06s/it][A
+Iteration:  75%|███████▌  | 3/4 [00:03<00:01,  1.06s/it][A
+Iteration: 100%|██████████| 4/4 [00:03<00:00,  1.09it/s][AIteration: 100%|██████████| 4/4 [00:03<00:00,  1.07it/s]
+Epoch:  54%|█████▍    | 14/26 [00:54<00:49,  4.15s/it]
+Iteration:   0%|          | 0/4 [00:00<?, ?it/s][A
+Iteration:  25%|██▌       | 1/4 [00:01<00:03,  1.06s/it][A
+Iteration:  50%|█████     | 2/4 [00:02<00:02,  1.06s/it][A
+Iteration:  75%|███████▌  | 3/4 [00:03<00:01,  1.06s/it][A
+Iteration: 100%|██████████| 4/4 [00:03<00:00,  1.09it/s][AIteration: 100%|██████████| 4/4 [00:03<00:00,  1.06it/s]
+Epoch:  58%|█████▊    | 15/26 [00:58<00:44,  4.04s/it]
+Iteration:   0%|          | 0/4 [00:00<?, ?it/s][A
+Iteration:  25%|██▌       | 1/4 [00:01<00:03,  1.06s/it][A
+Iteration:  50%|█████     | 2/4 [00:02<00:02,  1.06s/it][A
+Iteration:  75%|███████▌  | 3/4 [00:03<00:01,  1.06s/it][A
+Iteration: 100%|██████████| 4/4 [00:03<00:00,  1.09it/s][AIteration: 100%|██████████| 4/4 [00:03<00:00,  1.06it/s]
+Epoch:  62%|██████▏   | 16/26 [01:02<00:39,  3.96s/it]
+Iteration:   0%|          | 0/4 [00:00<?, ?it/s][A
+Iteration:  25%|██▌       | 1/4 [00:01<00:03,  1.06s/it][A
+Iteration:  50%|█████     | 2/4 [00:02<00:02,  1.06s/it][A
+Iteration:  75%|███████▌  | 3/4 [00:03<00:01,  1.06s/it][A
+Iteration: 100%|██████████| 4/4 [00:03<00:00,  1.09it/s][AIteration: 100%|██████████| 4/4 [00:03<00:00,  1.06it/s]
+Epoch:  65%|██████▌   | 17/26 [01:05<00:35,  3.90s/it]
+Iteration:   0%|          | 0/4 [00:00<?, ?it/s][A
+Iteration:  25%|██▌       | 1/4 [00:01<00:03,  1.06s/it][A
+Iteration:  50%|█████     | 2/4 [00:02<00:02,  1.06s/it][A
+Iteration:  75%|███████▌  | 3/4 [00:03<00:01,  1.06s/it][A
+Iteration: 100%|██████████| 4/4 [00:03<00:00,  1.09it/s][AIteration: 100%|██████████| 4/4 [00:03<00:00,  1.06it/s]
+Epoch:  69%|██████▉   | 18/26 [01:09<00:30,  3.86s/it]
+Iteration:   0%|          | 0/4 [00:00<?, ?it/s][A
+Iteration:  25%|██▌       | 1/4 [00:01<00:03,  1.05s/it][A
+Iteration:  50%|█████     | 2/4 [00:02<00:02,  1.06s/it][A
+Iteration:  75%|███████▌  | 3/4 [00:03<00:01,  1.06s/it][A
+Iteration: 100%|██████████| 4/4 [00:03<00:00,  1.09it/s][AIteration: 100%|██████████| 4/4 [00:03<00:00,  1.06it/s]
+Epoch:  73%|███████▎  | 19/26 [01:13<00:26,  3.83s/it]
+Iteration:   0%|          | 0/4 [00:00<?, ?it/s][A
+Iteration:  25%|██▌       | 1/4 [00:01<00:03,  1.06s/it][A
+Iteration:  50%|█████     | 2/4 [00:02<00:02,  1.06s/it][A
+Iteration:  75%|███████▌  | 3/4 [00:03<00:01,  1.06s/it][A
+Iteration: 100%|██████████| 4/4 [00:03<00:00,  1.09it/s][AIteration: 100%|██████████| 4/4 [00:03<00:00,  1.06it/s]
+Epoch:  77%|███████▋  | 20/26 [01:17<00:22,  3.82s/it]
+Iteration:   0%|          | 0/4 [00:00<?, ?it/s][A
+Iteration:  25%|██▌       | 1/4 [00:01<00:03,  1.06s/it][A
+Iteration:  50%|█████     | 2/4 [00:02<00:02,  1.06s/it][A
+Iteration:  75%|███████▌  | 3/4 [00:03<00:01,  1.06s/it][A
+Iteration: 100%|██████████| 4/4 [00:03<00:00,  1.09it/s][AIteration: 100%|██████████| 4/4 [00:03<00:00,  1.06it/s]
+Epoch:  81%|████████  | 21/26 [01:20<00:19,  3.80s/it]
+Iteration:   0%|          | 0/4 [00:00<?, ?it/s][A
+Iteration:  25%|██▌       | 1/4 [00:01<00:03,  1.09s/it][A
+Iteration:  50%|█████     | 2/4 [00:02<00:02,  1.09s/it][A
+Iteration:  75%|███████▌  | 3/4 [00:03<00:01,  1.10s/it][A
+Iteration: 100%|██████████| 4/4 [00:03<00:00,  1.06it/s][AIteration: 100%|██████████| 4/4 [00:03<00:00,  1.03it/s]
+Epoch:  85%|████████▍ | 22/26 [01:24<00:15,  3.83s/it]
+Iteration:   0%|          | 0/4 [00:00<?, ?it/s][A
+Iteration:  25%|██▌       | 1/4 [00:01<00:03,  1.06s/it][A
+Iteration:  50%|█████     | 2/4 [00:02<00:02,  1.06s/it][A
+Iteration:  75%|███████▌  | 3/4 [00:03<00:01,  1.06s/it][A
+Iteration: 100%|██████████| 4/4 [00:03<00:00,  1.09it/s][AIteration: 100%|██████████| 4/4 [00:03<00:00,  1.06it/s]
+Epoch:  88%|████████▊ | 23/26 [01:28<00:11,  3.81s/it]
+Iteration:   0%|          | 0/4 [00:00<?, ?it/s][A
+Iteration:  25%|██▌       | 1/4 [00:01<00:03,  1.06s/it][A
+Iteration:  50%|█████     | 2/4 [00:02<00:02,  1.06s/it][A
+Iteration:  75%|███████▌  | 3/4 [00:03<00:01,  1.06s/it][A
+Iteration: 100%|██████████| 4/4 [00:03<00:00,  1.09it/s][AIteration: 100%|██████████| 4/4 [00:03<00:00,  1.06it/s]
+Epoch:  92%|█████████▏| 24/26 [01:32<00:07,  3.80s/it]
+Iteration:   0%|          | 0/4 [00:00<?, ?it/s][A
+Iteration:  25%|██▌       | 1/4 [00:01<00:03,  1.06s/it][A
+Iteration:  50%|█████     | 2/4 [00:02<00:02,  1.06s/it][A
+Iteration:  75%|███████▌  | 3/4 [00:03<00:01,  1.06s/it][A
+
+Evaluating:   0%|          | 0/1 [00:00<?, ?it/s][A[A
+
+Evaluating: 100%|██████████| 1/1 [00:01<00:00,  1.08s/it][A[AEvaluating: 100%|██████████| 1/1 [00:01<00:00,  1.08s/it]
+2021-09-12 21:37:25,552 - INFO - wrapper - {'acc': 0.375}
+2021-09-12 21:37:25,552 - INFO - wrapper - 1
+
+Iteration: 100%|██████████| 4/4 [00:04<00:00,  1.26s/it][AIteration: 100%|██████████| 4/4 [00:04<00:00,  1.22s/it]
+Epoch:  96%|█████████▌| 25/26 [01:37<00:04,  4.13s/it]
+Iteration:   0%|          | 0/4 [00:00<?, ?it/s][AIteration:   0%|          | 0/4 [00:01<?, ?it/s]
+Epoch:  96%|█████████▌| 25/26 [01:38<00:03,  3.93s/it]
+Some weights of RobertaForMaskedLM were not initialized from the model checkpoint at microsoft/codebert-base and are newly initialized: ['lm_head.layer_norm.bias', 'lm_head.dense.weight', 'lm_head.layer_norm.weight', 'lm_head.decoder.bias', 'lm_head.dense.bias', 'lm_head.decoder.weight', 'lm_head.bias']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+2021-09-12 21:37:37,352 - INFO - modeling - Saving complete
+2021-09-12 21:37:37,352 - INFO - modeling - Starting evaluation...
+Some weights of RobertaForMaskedLM were not initialized from the model checkpoint at microsoft/codebert-base and are newly initialized: ['lm_head.layer_norm.bias', 'lm_head.dense.weight', 'lm_head.layer_norm.weight', 'lm_head.decoder.bias', 'lm_head.dense.bias', 'lm_head.decoder.weight', 'lm_head.bias']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Evaluating:   0%|          | 0/1 [00:00<?, ?it/s]Evaluating: 100%|██████████| 1/1 [00:01<00:00,  1.09s/it]Evaluating: 100%|██████████| 1/1 [00:01<00:00,  1.09s/it]
+Evaluating:   0%|          | 0/1 [00:00<?, ?it/s]Evaluating: 100%|██████████| 1/1 [00:01<00:00,  1.08s/it]Evaluating: 100%|██████████| 1/1 [00:01<00:00,  1.08s/it]
+2021-09-12 21:37:49,992 - INFO - modeling - --- RESULT (pattern_id=10, iteration=0) ---
+2021-09-12 21:37:49,992 - INFO - modeling - eval_results:
+2021-09-12 21:37:49,992 - INFO - modeling - {'acc': 0.4375}
+2021-09-12 21:37:49,992 - INFO - modeling - dev32_results:
+2021-09-12 21:37:49,992 - INFO - modeling - {'acc': 0.5}
+2021-09-12 21:37:50,079 - INFO - modeling - === OVERALL RESULTS ===
+2021-09-12 21:37:50,079 - INFO - modeling - eval_results:
+2021-09-12 21:37:50,079 - INFO - modeling - acc-p10: 0.4375 +- 0
+2021-09-12 21:37:50,079 - INFO - modeling - acc-all-p: 0.4375 +- 0
+2021-09-12 21:37:50,079 - INFO - modeling - dev32_results:
+2021-09-12 21:37:50,079 - INFO - modeling - acc-p10: 0.5 +- 0
+2021-09-12 21:37:50,079 - INFO - modeling - acc-all-p: 0.5 +- 0
+2021-09-12 21:37:50,079 - INFO - modeling - 
+====================
+Time: 0:02:24
+====================
+
+
+../../../output/clone_detection/ptuning/java_train_32_test/p10-i0
+
+====================
+Parameter total: 150684249, trainable: 150684249
+====================
+Stop at 101/100
+--- RESULT (pattern_id=10, iteration=0) ---
+eval_results: {'acc': 0.4375}
+dev32_results: {'acc': 0.5}
+
+====================
+Time: 0:02:24
+====================

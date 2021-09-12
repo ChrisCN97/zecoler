@@ -1,21 +1,19 @@
 export CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7
 
-PROJECT_NAME=clonedet_0802_f
-DATASET_NAME=Java_3k
-step=12000
-eval_step=100
+NAME=java_train_32_test
+step=100
+eval_step=50
 batch=5
 show=0
 
-python3 ../cli.py \
---freeze_plm \
+python3 ../../../../method/ptuning/cli.py \
 --pattern_ids 10 \
 --show_limit ${show} \
---data_dir ../../CloneDetection_32dev/${DATASET_NAME} \
+--data_dir ../../../../method/ptuning/dataset/clone_detection/${NAME} \
 --model_type roberta \
 --model_name_or_path microsoft/codebert-base \
 --task_name clonedet \
---output_dir ../output/${PROJECT_NAME} \
+--output_dir ../../../output/clone_detection/ptuning/${NAME} \
 --do_eval \
 --do_train \
 --pet_per_gpu_eval_batch_size 16 \
@@ -27,4 +25,4 @@ python3 ../cli.py \
 --eval_every_step ${eval_step} \
 --overwrite_output_dir \
 --embed_size 768 \
---show_limit 0 | tee log/${PROJECT_NAME}_print.log
+--show_limit 0
