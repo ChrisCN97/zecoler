@@ -2,3 +2,4 @@
 **/.DS_Store
 **/dataset/*/*
 !**/dataset/*/util.py
+*.log

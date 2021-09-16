@@ -1,11 +1,11 @@
-save_dir=../../../output/clone_detection/finetune/java_train_400_test
+save_dir=../../../output/clone_detection/finetune/java_train_32
 data_folder=../../../../method/finetune/dataset/clone_detection
-lang=Java_r
+lang=Java/32
 batch_size=10
 lr=1e-5
 epoch_num=4
 rate=1
-eval_step=100
+eval_step=5
 
 python ../../../../method/finetune/code/run.py \
 --freeze_plm \

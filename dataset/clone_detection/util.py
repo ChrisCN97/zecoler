@@ -221,7 +221,8 @@ def check_example(lang, name):
 def split_txt(lang, sourse, target1, size, target2=""):
     with open(os.path.join(lang, "{}.txt".format(sourse))) as sf:
         with open(os.path.join(lang, "{}_{}.txt".format(target1, size)), 'w') as t1f:
-            sl = sf.readlines()
+            sl = [s.strip() for s in sf.readlines()]
+            random.shuffle(sl)
             p_num = size // 2
             n_num = p_num
             idx = len(sl)-1
@@ -241,11 +242,11 @@ def split_txt(lang, sourse, target1, size, target2=""):
                 if p_num == 0 and n_num == 0:
                     break
             random.shuffle(t1_ls)
-            t1f.write("".join(t1_ls))
+            t1f.write("\n".join(t1_ls))
     if target2 != "":
         with open(os.path.join(lang, "{}_{}.txt".format(target2, len(sl))), 'w') as t2f:
             random.shuffle(sl)
-            t2f.write("".join(sl))
+            t2f.write("\n".join(sl))
 
 if __name__ == '__main__':
     MIN_SIZE = 690

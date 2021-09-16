@@ -1,6 +1,6 @@
 export CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7
 
-NAME=java_train_32_test
+NAME=Java/32
 step=100
 eval_step=50
 batch=5
