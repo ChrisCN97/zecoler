@@ -593,6 +593,9 @@ def main():
 
     args.start_epoch = 0
     args.start_step = 0
+
+    if not os.path.exists(args.output_dir):
+        os.makedirs(args.output_dir)
     checkpoint_last = os.path.join(args.output_dir, 'checkpoint-last')
     if os.path.exists(checkpoint_last) and os.listdir(checkpoint_last):
         args.model_name_or_path = os.path.join(checkpoint_last, 'pytorch_model.bin')

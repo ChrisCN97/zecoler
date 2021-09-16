@@ -1,14 +1,13 @@
-save_dir=./save0802
-data_folder=/mnt/sda/cn/python/Ptuning/dataset/new
-lang=Python
-
+save_dir=../../../output/clone_detection/finetune/java_train_400_test
+data_folder=../../../../method/finetune/dataset/clone_detection
+lang=Java_r
 batch_size=10
-lr=3e-5
-epoch_num=20
+lr=1e-5
+epoch_num=4
 rate=1
 eval_step=100
 
-python run.py \
+python ../../../../method/finetune/code/run.py \
     --output_dir=${save_dir} \
     --data_folder=${data_folder}/${lang} \
     --predictions_name=pre_${lang}.txt \
@@ -27,4 +26,4 @@ python run.py \
     --train_data_rate ${rate} \
     --seed 123456 2>&1| tee ${save_dir}/test.log \
 && \
-python ../evaluator/evaluator.py -a ${data_folder}//${lang}/test.txt -p ${save_dir}/pre_${lang}.txt -o ${save_dir}/res_${lang}.txt
+python ../../../../method/finetune/evaluator/evaluator.py -a ${data_folder}//${lang}/test.txt -p ${save_dir}/pre_${lang}.txt -o ../../../output/clone_detection/finetune/log/res_${lang}.txt
