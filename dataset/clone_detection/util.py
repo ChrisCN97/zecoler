@@ -248,6 +248,9 @@ def split_txt(lang, sourse, target1, size, target2=""):
             random.shuffle(sl)
             t2f.write("\n".join(sl))
 
+def get_data_list():
+    os.system("tree")
+
 if __name__ == '__main__':
     MIN_SIZE = 690
     langs_need = ["Java", "Python", "C++"]
@@ -262,12 +265,14 @@ if __name__ == '__main__':
              'Visual Basic', 'Haxe', 'Julia', 'Lisp', 'dc', 'bc', 'C#', 'Awk', 'TypeScript', 'Haskell', 'Scala', 'Text',
              'Kotlin', 'Lua', 'Erlang', 'Standard ML', 'Bf', 'Prolog', 'Crystal', 'Nim', 'Ruby', 'D', 'Pascal', 'Forth',
              'Go', 'C++', 'Cython', 'Bash']
-    lang = "Java"
+    # lang = "JavaScript"
     # size_txt = gen_size_txt(lang, p_list, code_len_min, code_len_max, max_repeat=240, max_pair=200000)
 
-    # split_txt(lang, sourse="total_201596", target1="temp", size=1400, target2="train")
+    # split_txt(lang, sourse="total_137324", target1="temp", size=1400, target2="train")
     # split_txt(lang, sourse="temp_1400", target1="dev", size=400, target2="test")
-    split_txt(lang, sourse="train_200196", target1="train", size=32)
+    split_txt(lang="JavaScript", sourse="train_135924", target1="train", size=32)
+    split_txt(lang="Python", sourse="train_200198", target1="train", size=32)
 
     # check_trainrepeat_pnrate(lang, name="dev_400.txt")
     # check_example(lang, name="test_1000.txt")
+    # get_data_list()

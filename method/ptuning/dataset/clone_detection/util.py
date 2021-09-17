@@ -57,5 +57,10 @@ def gen_dataset(lang, size):
     change_format(os.path.join(SOURCE_PATH, lang, TEST),
                   os.path.join(folder, "val.jsonl"), url_to_code, idx)
 
+def get_data_list(lang):
+    os.system("ls -l {}".format(lang))
+
 if __name__ == "__main__":
-    gen_dataset(lang="Java", size="32")
+    gen_dataset(lang="Python", size="32")
+    gen_dataset(lang="JavaScript", size="32")
+    # get_data_list("Java")
