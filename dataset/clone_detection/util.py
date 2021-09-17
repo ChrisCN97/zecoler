@@ -4,6 +4,7 @@ import random
 import shutil
 import matplotlib.pyplot as plt
 import numpy as np
+import sys
 
 CODENET_PATH = "/mnt/sda/cn/python/codeBert/codeNet/Project_CodeNet/data"
 
@@ -154,8 +155,8 @@ def gen_size_txt(lang, p_list, code_len_min, code_len_max, max_repeat=200, max_p
                             pair_num += 1
                             break
     gen_data_jsonl(data_jsonl_list, folder)
-    size_txt = "total_{}.txt".format(len(dataset_list))
-    with open(os.path.join(folder, size_txt), 'w') as f:
+    size_txt = "total_{}".format(len(dataset_list))
+    with open(os.path.join(folder, size_txt+".txt"), 'w') as f:
         random.shuffle(dataset_list)
         f.write("\n".join(dataset_list))
     print("data.jsonl: {}, {}".format(len(data_jsonl_list), size_txt))
@@ -222,6 +223,9 @@ def split_txt(lang, sourse, target1, size, target2=""):
     with open(os.path.join(lang, "{}.txt".format(sourse))) as sf:
         with open(os.path.join(lang, "{}_{}.txt".format(target1, size)), 'w') as t1f:
             sl = [s.strip() for s in sf.readlines()]
+            if size > len(sl):
+                print("{}.txt does not contain {} data".format(sourse, size))
+                return
             random.shuffle(sl)
             p_num = size // 2
             n_num = p_num
@@ -247,9 +251,27 @@ def split_txt(lang, sourse, target1, size, target2=""):
         with open(os.path.join(lang, "{}_{}.txt".format(target2, len(sl))), 'w') as t2f:
             random.shuffle(sl)
             t2f.write("\n".join(sl))
+        return "{}_{}.txt".format(target2, len(sl))
+    else:
+        return ""
 
-def get_data_list():
-    os.system("tree")
+def gen_new_lang(lang, p_list, code_len_min, code_len_max, max_repeat, max_pair):
+    size_txt = gen_size_txt(lang, p_list, code_len_min, code_len_max, max_repeat, max_pair)
+    train_txt = split_txt(lang, sourse=size_txt, target1="temp", size=1400, target2="train")
+    split_txt(lang, sourse="temp_1400", target1="dev", size=400, target2="test")
+    os.system("rm {}/temp_1400.txt".format(lang))
+    os.system("mv {0}/{1} {0}/train.txt".format(lang, train_txt))
+
+def gen_train(lang, size):
+    split_txt(lang=lang, sourse="train", target1="train", size=size)
+
+def get_data_list(level=-1, lang=""):
+    cmd = "tree"
+    if level != -1:
+        cmd += " -L {}".format(level)
+    if lang != "":
+        cmd += " {}".format(lang)
+    os.system(cmd)
 
 if __name__ == '__main__':
     MIN_SIZE = 690
@@ -260,19 +282,18 @@ if __name__ == '__main__':
     # find_qualified_problem(MIN_SIZE, langs_need, q_need, code_len_min, code_len_max)
 
     p_list = ['p02696', 'p02743', 'p03086', 'p02646', 'p02659', 'p02953', 'p03471', 'p02572', 'p02658', 'p03001']
-    langs = ['Scheme', 'Objective-C', 'Swift', 'Racket', 'Clojure', 'F#', 'Perl', 'Java', 'Octave', 'Vim', 'Python',
-             'PHP', 'JavaScript', 'COBOL', 'Elixir', 'Sed', 'MoonScript', 'C', 'Fortran', 'OCaml', 'Rust', 'Dart',
-             'Visual Basic', 'Haxe', 'Julia', 'Lisp', 'dc', 'bc', 'C#', 'Awk', 'TypeScript', 'Haskell', 'Scala', 'Text',
-             'Kotlin', 'Lua', 'Erlang', 'Standard ML', 'Bf', 'Prolog', 'Crystal', 'Nim', 'Ruby', 'D', 'Pascal', 'Forth',
-             'Go', 'C++', 'Cython', 'Bash']
-    # lang = "JavaScript"
-    # size_txt = gen_size_txt(lang, p_list, code_len_min, code_len_max, max_repeat=240, max_pair=200000)
+    # langs = ['Scheme', 'Objective-C', 'Swift', 'Racket', 'Clojure', 'F#', 'Perl', 'Java', 'Octave', 'Vim', 'Python',
+    #          'PHP', 'JavaScript', 'COBOL', 'Elixir', 'Sed', 'MoonScript', 'C', 'Fortran', 'OCaml', 'Rust', 'Dart',
+    #          'Visual Basic', 'Haxe', 'Julia', 'Lisp', 'dc', 'bc', 'C#', 'Awk', 'TypeScript', 'Haskell', 'Scala', 'Text',
+    #          'Kotlin', 'Lua', 'Erlang', 'Standard ML', 'Bf', 'Prolog', 'Crystal', 'Nim', 'Ruby', 'D', 'Pascal', 'Forth',
+    #          'Go', 'C++', 'Cython', 'Bash']
 
-    # split_txt(lang, sourse="total_137324", target1="temp", size=1400, target2="train")
-    # split_txt(lang, sourse="temp_1400", target1="dev", size=400, target2="test")
-    split_txt(lang="JavaScript", sourse="train_135924", target1="train", size=32)
-    split_txt(lang="Python", sourse="train_200198", target1="train", size=32)
+    # langs = ["Ruby", "Go", "C#", "C++", "C", "Haskell", "Kotlin", "Fortran"]
+    # for lang in langs:
+    #     gen_new_lang(lang, p_list, code_len_min, code_len_max, max_repeat=240, max_pair=200000)
+    #     gen_train(lang, size=32)
+    gen_train(lang="Python", size=5000)
 
     # check_trainrepeat_pnrate(lang, name="dev_400.txt")
     # check_example(lang, name="test_1000.txt")
-    # get_data_list()
+    get_data_list(lang="Python")

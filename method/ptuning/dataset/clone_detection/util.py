@@ -45,22 +45,36 @@ def change_format(source, target, url_to_code, idx):
     return idx
 
 def gen_dataset(lang, size):
+    size = str(size)
     if not os.path.exists(lang):
         os.mkdir(lang)
     folder = get_clear_folder(os.path.join(lang, size))
     url_to_code = get_url2code(lang)
     idx = 0
-    idx = change_format(os.path.join(SOURCE_PATH, lang, "{}{}.txt".format(TRAIN_PREFIX, size)),
+    source = os.path.join(SOURCE_PATH, lang, "{}{}.txt".format(TRAIN_PREFIX, size))
+    if not os.path.exists(source):
+        print("{}/{}{}.txt needs to be created!".format(lang, TRAIN_PREFIX, size))
+        return
+    idx = change_format(source,
                         os.path.join(folder, "train.jsonl"), url_to_code, idx)
     idx = change_format(os.path.join(SOURCE_PATH, lang, DEV),
                         os.path.join(folder, "dev32.jsonl"), url_to_code, idx)
     change_format(os.path.join(SOURCE_PATH, lang, TEST),
                   os.path.join(folder, "val.jsonl"), url_to_code, idx)
 
-def get_data_list(lang):
-    os.system("ls -l {}".format(lang))
+def get_data_list(level=-1, lang=""):
+    cmd = "tree"
+    if level != -1:
+        cmd += " -L {}".format(level)
+    if lang != "":
+        cmd += " {}".format(lang)
+    os.system(cmd)
 
 if __name__ == "__main__":
-    gen_dataset(lang="Python", size="32")
-    gen_dataset(lang="JavaScript", size="32")
-    # get_data_list("Java")
+    # gen_dataset(lang="Python", size="32")
+    # gen_dataset(lang="JavaScript", size="32")
+    # langs = ["PHP", "Ruby", "Go", "C#", "C++", "C", "Haskell", "Kotlin", "Fortran"]
+    # for lang in langs:
+    #     gen_dataset(lang=lang, size="32")
+    gen_dataset(lang="Python", size=5000)
+    get_data_list(level=-1, lang="Python")
