@@ -1,36 +1,6 @@
+from util import get_dataset
+from server import S1, S2
 import os
-import shutil
-from server import S1, S2, USER, IP
-import matplotlib.pyplot as plt
-import numpy as np
-
-def get_clear_folder(folder):
-    if os.path.exists(folder):
-        shutil.rmtree(folder)
-    os.makedirs(folder)
-    return folder
-
-def scp_get(source, target, port, user=USER, ip=IP):
-    os.system("scp -r -P {} {}@{}:{} {}".format(port, user, ip, source, target))
-
-def get_dataset(method, task, lang, size, from_server):
-    source = os.path.join(from_server["root"], "method", method, "dataset", task, lang, str(size))
-    target = os.path.join("../method", method, "dataset", task, lang)
-    scp_get(source, target, from_server["port"])
-
-def get_output(method, task, name, from_server):
-    source = os.path.join(from_server["root"], "run/output", task, method, name)
-    target = os.path.join("output", task, method)
-    scp_get(source, target, from_server["port"])
-
-def plot_loss(folder, name):
-    # name: acc.npy / loss.npy
-    loss_list = np.load(os.path.join(folder, name))
-    print(len(loss_list))
-    plt.figure()
-    plt.plot(np.arange(len(loss_list)), loss_list)
-    plt.title("{}: {}".format(folder, name))
-    plt.show()
 
 def ptuning(
         model_type="roberta",
@@ -70,7 +40,10 @@ def ptuning(
         else:
             print("Dataset {}/{}/{} needs to be generated!".format(task_name, lang, size))
     cmd += "--data_dir {} ".format(data_dir)
-    log = "output/{}/ptuning/log/{}_{}.log".format(task_name, output, lang)
+    log_path = "output/{}/ptuning/log/{}".format(task_name, output)
+    if not os.path.exists(log_path):
+        os.mkdir(log_path)
+    log = "{}/{}.log".format(log_path, lang)
     output = "output/{}/ptuning/{}".format(task_name, output)
     if zeroshot and \
             (not os.path.exists(output) or not os.listdir("{}/p{}-i0".format(output, pattern_ids))):
@@ -85,9 +58,9 @@ def ptuning(
     cmd += "--pattern_ids {} ".format(pattern_ids)
     cmd += "--pet_per_gpu_train_batch_size {} ".format(train_batch)
     cmd += "--pet_max_steps {} ".format(max_step)
-    cmd += "--eval_every_step {} ".format(eval_step)
     cmd += "--pet_repetitions {} ".format(pet_repetitions)
-    cmd += "--show_limit {}".format(show_limit)
+    cmd += "--show_limit {} ".format(show_limit)
+    cmd += "--eval_every_step {} ".format(eval_step)
     if do_train:
         print("{}/p{}-i0".format(output, pattern_ids))
     if is_part:
@@ -119,16 +92,24 @@ def ptuning_clone_detection_list(task_dicts, env):
     print(cmd)
     with open("run.sh", 'w') as f:
         f.write(cmd)
+    if env == S1:
+        print("conda activate ptuning")
     print("nohup ./run.sh > output/clone_detection/ptuning/log/task_list.log 2>&1 &".format(cmd))
 
+def log_checker(output_name, lang, langs):
+    log_folder = os.path.join("output/clone_detection/ptuning/log", output_name)
+
+
 if __name__ == "__main__":
-    # get_dataset(method="ptuning", task="clone_detection", lang="Java", size="5000", from_server=S2)
-    # langs = ["Java", "JavaScript", "PHP", "Ruby", "Go", "C#", "C++", "C", "Haskell", "Kotlin", "Fortran"]
-    # task_dicts = [{"lang": "Python", "size": 5000, "output": "Python_5000", "do_train": True, "freeze_plm": False,
+    # task_dicts = [{"lang": "Java", "size": 5000, "output": "Java_5000_2", "do_train": True, "freeze_plm": False,
     #      "max_step": 4000, "eval_step": 100, "zeroshot": False}]
-    # for lang in langs:
-    #     task_dicts.append({"lang": lang, "size": 32, "output": "Python_5000", "do_train": False, "freeze_plm": False,
-    #      "max_step": 10, "eval_step": 5, "zeroshot": True})
-    # ptuning_clone_detection_list(task_dicts, env=S2)
-    # get_output(method="ptuning", task="clone_detection", name="Java_5000", from_server=S1)
-    plot_loss(folder="output/clone_detection/ptuning/Python_5000/p10-i0", name="acc.npy")
+    task_dicts = []
+    langs = ["Python", "JavaScript", "PHP", "Ruby", "Go", "C#", "C++", "C", "Haskell", "Kotlin", "Fortran"]
+    for size in [2500, 1000, 500, 32]:
+        task_dicts.append(
+            {"lang": "Java", "size": size, "output": "Java_{}".format(size), "do_train": True, "freeze_plm": False,
+             "max_step": 2500, "eval_step": 80, "zeroshot": False})
+        for lang in langs:
+            task_dicts.append({"lang": lang, "size": 32, "output": "Java_{}".format(size), "do_train": False, "freeze_plm": False,
+             "max_step": 10, "eval_step": 5, "zeroshot": True})
+    ptuning_clone_detection_list(task_dicts, S2)

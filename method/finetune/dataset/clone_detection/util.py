@@ -44,13 +44,47 @@ def gen_dataset(lang, size):
     folder = get_clear_folder(os.path.join(lang, size))
     url_to_code = get_url2code(lang)
     data_jsonl_list = []
-    trans_file(os.path.join(SOURCE_PATH, lang, "{}{}.txt".format(TRAIN_PREFIX, size)),
-               os.path.join(folder, "train.txt"), url_to_code, data_jsonl_list)
+    source = os.path.join(SOURCE_PATH, lang, "{}{}.txt".format(TRAIN_PREFIX, size))
+    if not os.path.exists(source):
+        print("{}/{}{}.txt needs to be created!".format(lang, TRAIN_PREFIX, size))
+        return
+    trans_file(source, os.path.join(folder, "train.txt"), url_to_code, data_jsonl_list)
     trans_file(os.path.join(SOURCE_PATH, lang, DEV),
                os.path.join(folder, "valid.txt"), url_to_code, data_jsonl_list)
     trans_file(os.path.join(SOURCE_PATH, lang, TEST),
                os.path.join(folder, "test.txt"), url_to_code, data_jsonl_list)
     gen_data_jsonl(data_jsonl_list, folder)
 
+def gen_test():
+    os.mkdir("Java/test")
+    lang = "Java"
+    size = 32
+    folder = "Java/test"
+    url_to_code = get_url2code(lang)
+    data_jsonl_list = []
+    source = os.path.join(SOURCE_PATH, lang, "{}{}.txt".format(TRAIN_PREFIX, size))
+    if not os.path.exists(source):
+        print("{}/{}{}.txt needs to be created!".format(lang, TRAIN_PREFIX, size))
+        return
+    trans_file(source, os.path.join(folder, "train.txt"), url_to_code, data_jsonl_list)
+    trans_file(os.path.join(SOURCE_PATH, lang, "{}{}.txt".format(TRAIN_PREFIX, size)),
+               os.path.join(folder, "train.txt"), url_to_code, data_jsonl_list)
+    os.system("cp test/train.txt test/valid.txt")
+    os.system("cp test/train.txt test/test.txt")
+    gen_data_jsonl(data_jsonl_list, folder)
+
+def get_data_list(level=-1, lang=""):
+    cmd = "tree"
+    if level != -1:
+        cmd += " -L {}".format(level)
+    if lang != "":
+        cmd += " {}".format(lang)
+    os.system(cmd)
+
 if __name__ == '__main__':
     gen_dataset(lang="Java", size="32")
+    # gen_test()
+    # langs = ["Python", "JavaScript", "PHP", "Ruby", "Go", "C#", "C++", "C", "Haskell", "Kotlin", "Fortran"]
+    # for lang in langs:
+    #     gen_dataset(lang=lang, size="32")
+    # get_data_list(level=-1, lang="")

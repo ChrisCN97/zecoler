@@ -281,7 +281,7 @@ if __name__ == '__main__':
     code_len_max = 600
     # find_qualified_problem(MIN_SIZE, langs_need, q_need, code_len_min, code_len_max)
 
-    p_list = ['p02696', 'p02743', 'p03086', 'p02646', 'p02659', 'p02953', 'p03471', 'p02572', 'p02658', 'p03001']
+    # p_list = ['p02696', 'p02743', 'p03086', 'p02646', 'p02659', 'p02953', 'p03471', 'p02572', 'p02658', 'p03001']
     # langs = ['Scheme', 'Objective-C', 'Swift', 'Racket', 'Clojure', 'F#', 'Perl', 'Java', 'Octave', 'Vim', 'Python',
     #          'PHP', 'JavaScript', 'COBOL', 'Elixir', 'Sed', 'MoonScript', 'C', 'Fortran', 'OCaml', 'Rust', 'Dart',
     #          'Visual Basic', 'Haxe', 'Julia', 'Lisp', 'dc', 'bc', 'C#', 'Awk', 'TypeScript', 'Haskell', 'Scala', 'Text',
@@ -292,8 +292,10 @@ if __name__ == '__main__':
     # for lang in langs:
     #     gen_new_lang(lang, p_list, code_len_min, code_len_max, max_repeat=240, max_pair=200000)
     #     gen_train(lang, size=32)
-    gen_train(lang="Python", size=5000)
+    gen_train(lang="Java", size=2500)
+    gen_train(lang="Java", size=1000)
+    gen_train(lang="Java", size=500)
 
     # check_trainrepeat_pnrate(lang, name="dev_400.txt")
     # check_example(lang, name="test_1000.txt")
-    get_data_list(lang="Python")
+    # get_data_list(level=-1, lang="")
