@@ -76,7 +76,7 @@ if __name__ == "__main__":
     # langs = ["PHP", "Ruby", "Go", "C#", "C++", "C", "Haskell", "Kotlin", "Fortran"]
     # for lang in langs:
     #     gen_dataset(lang=lang, size="32")
-    # gen_dataset(lang="Java", size=2500)
-    # gen_dataset(lang="Java", size=1000)
-    # gen_dataset(lang="Java", size=500)
-    get_data_list(level=-1, lang="")
+    gen_dataset(lang="Java", size=3000)
+    # for size in [400, 300, 200, 100]:
+    #     gen_dataset(lang="Java", size=size)
+    # get_data_list(level=-1, lang="")

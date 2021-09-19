@@ -288,13 +288,7 @@ if __name__ == '__main__':
     #          'Kotlin', 'Lua', 'Erlang', 'Standard ML', 'Bf', 'Prolog', 'Crystal', 'Nim', 'Ruby', 'D', 'Pascal', 'Forth',
     #          'Go', 'C++', 'Cython', 'Bash']
 
-    # langs = ["Ruby", "Go", "C#", "C++", "C", "Haskell", "Kotlin", "Fortran"]
-    # for lang in langs:
-    #     gen_new_lang(lang, p_list, code_len_min, code_len_max, max_repeat=240, max_pair=200000)
-    #     gen_train(lang, size=32)
-    gen_train(lang="Java", size=2500)
-    gen_train(lang="Java", size=1000)
-    gen_train(lang="Java", size=500)
+    gen_train(lang="Java", size=3000)
 
     # check_trainrepeat_pnrate(lang, name="dev_400.txt")
     # check_example(lang, name="test_1000.txt")

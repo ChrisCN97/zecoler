@@ -2,6 +2,8 @@ from util import get_dataset
 from server import S1, S2
 import os
 
+langs = ["Java", "Python", "JavaScript", "PHP", "Ruby", "Go", "C#", "C++", "C", "Haskell", "Kotlin", "Fortran"]
+
 def ptuning(
         model_type="roberta",
         model_name_or_path="microsoft/codebert-base",
@@ -74,8 +76,9 @@ def ptuning(
     with open("run.sh", 'w') as f:
         f.write(cmd)
 
-def ptuning_clone_detection_list(task_dicts, env):
+def ptuning_clone_detection_list(task_dicts, env, check_data=False):
     cmd = ""
+    pre_time = 0
     for task in task_dicts:
         c = ptuning(
             lang=task["lang"],
@@ -89,27 +92,36 @@ def ptuning_clone_detection_list(task_dicts, env):
             env=env,
             is_part=True)
         cmd += c + "\n"
+        if not task["zeroshot"]:
+            if task["freeze_plm"]:
+                pre_time += int(task["max_step"]) * 0.012
+            else:
+                pre_time += int(task["max_step"])*0.021
+        else:
+            pre_time += 1
     print(cmd)
-    with open("run.sh", 'w') as f:
-        f.write(cmd)
+    if not check_data:
+        with open("run.sh", 'w') as f:
+            f.write(cmd)
     if env == S1:
         print("conda activate ptuning")
     print("nohup ./run.sh > output/clone_detection/ptuning/log/task_list.log 2>&1 &".format(cmd))
-
-def log_checker(output_name, lang, langs):
-    log_folder = os.path.join("output/clone_detection/ptuning/log", output_name)
-
+    h, m = divmod(pre_time, 60)
+    print("%dh %02dmin" % (h, m))
 
 if __name__ == "__main__":
-    # task_dicts = [{"lang": "Java", "size": 5000, "output": "Java_5000_2", "do_train": True, "freeze_plm": False,
-    #      "max_step": 4000, "eval_step": 100, "zeroshot": False}]
     task_dicts = []
-    langs = ["Python", "JavaScript", "PHP", "Ruby", "Go", "C#", "C++", "C", "Haskell", "Kotlin", "Fortran"]
-    for size in [2500, 1000, 500, 32]:
+    for lang in langs:
         task_dicts.append(
-            {"lang": "Java", "size": size, "output": "Java_{}".format(size), "do_train": True, "freeze_plm": False,
-             "max_step": 2500, "eval_step": 80, "zeroshot": False})
-        for lang in langs:
-            task_dicts.append({"lang": lang, "size": 32, "output": "Java_{}".format(size), "do_train": False, "freeze_plm": False,
+            {"lang": lang, "size": 32, "output": "C++_5000_2", "do_train": False, "freeze_plm": False,
              "max_step": 10, "eval_step": 5, "zeroshot": True})
-    ptuning_clone_detection_list(task_dicts, S2)
+    task_dicts.append(
+        {"lang": "Java", "size": 5000, "output": "Java_5000_5", "do_train": True, "freeze_plm": False,
+         "max_step": 20000, "eval_step": 200, "zeroshot": False})
+    for lang in langs:
+        if lang == "Java":
+            continue
+        task_dicts.append(
+            {"lang": lang, "size": 32, "output": "Java_5000_5", "do_train": False, "freeze_plm": False,
+             "max_step": 10, "eval_step": 5, "zeroshot": True})
+    ptuning_clone_detection_list(task_dicts, S2, check_data=True)

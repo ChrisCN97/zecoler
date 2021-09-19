@@ -82,7 +82,7 @@ def get_data_list(level=-1, lang=""):
     os.system(cmd)
 
 if __name__ == '__main__':
-    gen_dataset(lang="Java", size="32")
+    gen_dataset(lang="Python", size="5000")
     # gen_test()
     # langs = ["Python", "JavaScript", "PHP", "Ruby", "Go", "C#", "C++", "C", "Haskell", "Kotlin", "Fortran"]
     # for lang in langs:

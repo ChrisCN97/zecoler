@@ -2,6 +2,8 @@ from util import get_dataset
 from server import S1, S2
 import os
 
+langs = ["Java", "Python", "JavaScript", "PHP", "Ruby", "Go", "C#", "C++", "C", "Haskell", "Kotlin", "Fortran"]
+
 def finetune(
         model_type="roberta",
         config_name="microsoft/codebert-base",
@@ -80,8 +82,9 @@ def finetune(
     with open("run.sh", 'w') as f:
         f.write(cmd)
 
-def finetune_clone_detection_list(task_dicts, env):
+def finetune_clone_detection_list(task_dicts, env, check_data=False):
     cmd = ""
+    pre_time = 0
     for task in task_dicts:
         c = finetune(
             lang=task["lang"],
@@ -95,18 +98,28 @@ def finetune_clone_detection_list(task_dicts, env):
             env=env,
             is_part=True)
         cmd += c + "\n"
+        if task["do_train"]:
+            pre_time += int(task["epoch"])*int(task["size"])/10*0.011
+        else:
+            pre_time += 0.633
     print(cmd)
-    with open("run.sh", 'w') as f:
-        f.write(cmd)
+    if not check_data:
+        with open("run.sh", 'w') as f:
+            f.write(cmd)
+    if env == S1:
+        print("conda activate ptuning")
     print("nohup ./run.sh > output/clone_detection/finetune/log/task_list.log 2>&1 &".format(cmd))
+    h, m = divmod(pre_time, 60)
+    print("%dh %02dmin" % (h, m))
 
 if __name__ == "__main__":
     # task_dicts = [{"lang": "Java", "size": 5000, "output": "Java_5000", "do_train": True, "freeze_plm": False,
     #                "epoch": 8, "eval_step": 100, "do_test": False}]
     task_dicts = []
-    langs = ["Java", "Python", "JavaScript", "PHP", "Ruby", "Go", "C#", "C++", "C", "Haskell", "Kotlin", "Fortran"]
-    for lang in langs:
-        task_dicts.append({"lang": lang, "size": 32, "output": "Java_5000", "do_train": False,
+    task_dicts.append({"lang": "Java", "size": 5000, "output": "Java_5000_2", "do_train": True,
+                       "freeze_plm": False, "epoch": 20, "eval_step": 100, "do_test": False})
+    for t_lang in langs:
+        task_dicts.append({"lang": t_lang, "size": 32, "output": "Java_5000_2", "do_train": False,
                            "freeze_plm": False, "epoch": 8, "eval_step": 100, "do_test": True})
-    finetune_clone_detection_list(task_dicts, S2)
+    finetune_clone_detection_list(task_dicts, S1, check_data=False)
 
