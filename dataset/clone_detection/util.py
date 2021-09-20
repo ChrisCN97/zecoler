@@ -288,7 +288,8 @@ if __name__ == '__main__':
     #          'Kotlin', 'Lua', 'Erlang', 'Standard ML', 'Bf', 'Prolog', 'Crystal', 'Nim', 'Ruby', 'D', 'Pascal', 'Forth',
     #          'Go', 'C++', 'Cython', 'Bash']
 
-    gen_train(lang="Java", size=3000)
+    gen_train(lang="Java", size=7000)
+    gen_train(lang="Java", size=10000)
 
     # check_trainrepeat_pnrate(lang, name="dev_400.txt")
     # check_example(lang, name="test_1000.txt")

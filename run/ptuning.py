@@ -1,5 +1,5 @@
 from util import get_dataset
-from server import S1, S2
+from server import S1, S2, S3
 import os
 
 langs = ["Java", "Python", "JavaScript", "PHP", "Ruby", "Go", "C#", "C++", "C", "Haskell", "Kotlin", "Fortran"]
@@ -105,23 +105,21 @@ def ptuning_clone_detection_list(task_dicts, env, check_data=False):
             f.write(cmd)
     if env == S1:
         print("conda activate ptuning")
+    if env == S3:
+        print("conda activate allennlp")
     print("nohup ./run.sh > output/clone_detection/ptuning/log/task_list.log 2>&1 &".format(cmd))
     h, m = divmod(pre_time, 60)
     print("%dh %02dmin" % (h, m))
 
 if __name__ == "__main__":
     task_dicts = []
-    for lang in langs:
-        task_dicts.append(
-            {"lang": lang, "size": 32, "output": "C++_5000_2", "do_train": False, "freeze_plm": False,
-             "max_step": 10, "eval_step": 5, "zeroshot": True})
     task_dicts.append(
-        {"lang": "Java", "size": 5000, "output": "Java_5000_5", "do_train": True, "freeze_plm": False,
-         "max_step": 20000, "eval_step": 200, "zeroshot": False})
+        {"lang": "Java", "size": 7000, "output": "Java_7000", "do_train": True,
+         "freeze_plm": False, "max_step": 14000, "eval_step": 100, "zeroshot": False})
     for lang in langs:
         if lang == "Java":
             continue
         task_dicts.append(
-            {"lang": lang, "size": 32, "output": "Java_5000_5", "do_train": False, "freeze_plm": False,
-             "max_step": 10, "eval_step": 5, "zeroshot": True})
-    ptuning_clone_detection_list(task_dicts, S2, check_data=True)
+            {"lang": lang, "size": 32, "output": "Java_7000", "do_train": False,
+             "freeze_plm": False, "max_step": 10, "eval_step": 5, "zeroshot": True})
+    ptuning_clone_detection_list(task_dicts, S2, check_data=False)

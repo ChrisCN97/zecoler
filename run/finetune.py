@@ -116,10 +116,11 @@ if __name__ == "__main__":
     # task_dicts = [{"lang": "Java", "size": 5000, "output": "Java_5000", "do_train": True, "freeze_plm": False,
     #                "epoch": 8, "eval_step": 100, "do_test": False}]
     task_dicts = []
-    task_dicts.append({"lang": "Java", "size": 5000, "output": "Java_5000_2", "do_train": True,
-                       "freeze_plm": False, "epoch": 20, "eval_step": 100, "do_test": False})
-    for t_lang in langs:
-        task_dicts.append({"lang": t_lang, "size": 32, "output": "Java_5000_2", "do_train": False,
-                           "freeze_plm": False, "epoch": 8, "eval_step": 100, "do_test": True})
-    finetune_clone_detection_list(task_dicts, S1, check_data=False)
+    for item in[(10000,200), (7000,140), (3000,100), (1000,100)]:
+        task_dicts.append({"lang": "Java", "size": item[0], "output": "Java_{}".format(item[0]), "do_train": True,
+                           "freeze_plm": False, "epoch": 20, "eval_step": item[1], "do_test": False})
+        for t_lang in langs:
+            task_dicts.append({"lang": t_lang, "size": 32, "output": "Java_{}".format(item[0]), "do_train": False,
+                               "freeze_plm": False, "epoch": 8, "eval_step": 100, "do_test": True})
+    finetune_clone_detection_list(task_dicts, S2, check_data=False)
 
