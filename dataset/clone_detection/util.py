@@ -219,12 +219,12 @@ def check_example(lang, name):
     else:
         print("Not Clone!")
 
-def split_txt(lang, sourse, target1, size, target2=""):
-    with open(os.path.join(lang, "{}.txt".format(sourse))) as sf:
+def split_txt(lang, source, target1, size, target2=""):
+    with open(os.path.join(lang, "{}.txt".format(source))) as sf:
         with open(os.path.join(lang, "{}_{}.txt".format(target1, size)), 'w') as t1f:
             sl = [s.strip() for s in sf.readlines()]
             if size > len(sl):
-                print("{}.txt does not contain {} data".format(sourse, size))
+                print("{}.txt does not contain {} data".format(source, size))
                 return
             random.shuffle(sl)
             p_num = size // 2
@@ -257,13 +257,13 @@ def split_txt(lang, sourse, target1, size, target2=""):
 
 def gen_new_lang(lang, p_list, code_len_min, code_len_max, max_repeat, max_pair):
     size_txt = gen_size_txt(lang, p_list, code_len_min, code_len_max, max_repeat, max_pair)
-    train_txt = split_txt(lang, sourse=size_txt, target1="temp", size=1400, target2="train")
-    split_txt(lang, sourse="temp_1400", target1="dev", size=400, target2="test")
+    train_txt = split_txt(lang, source=size_txt, target1="temp", size=1400, target2="train")
+    split_txt(lang, source="temp_1400", target1="dev", size=400, target2="test")
     os.system("rm {}/temp_1400.txt".format(lang))
     os.system("mv {0}/{1} {0}/train.txt".format(lang, train_txt))
 
 def gen_train(lang, size):
-    split_txt(lang=lang, sourse="train", target1="train", size=size)
+    split_txt(lang=lang, source="train", target1="train", size=size)
 
 def get_data_list(level=-1, lang=""):
     cmd = "tree"
@@ -288,9 +288,9 @@ if __name__ == '__main__':
     #          'Kotlin', 'Lua', 'Erlang', 'Standard ML', 'Bf', 'Prolog', 'Crystal', 'Nim', 'Ruby', 'D', 'Pascal', 'Forth',
     #          'Go', 'C++', 'Cython', 'Bash']
 
-    gen_train(lang="Java", size=7000)
-    gen_train(lang="Java", size=10000)
+    # gen_train(lang="Java", size=7000)
+    # gen_train(lang="Java", size=10000)
 
     # check_trainrepeat_pnrate(lang, name="dev_400.txt")
-    # check_example(lang, name="test_1000.txt")
+    check_example(lang="C", name="test_1000.txt")
     # get_data_list(level=-1, lang="")

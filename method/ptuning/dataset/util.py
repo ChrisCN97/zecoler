@@ -3,7 +3,8 @@ import json
 import random
 import shutil
 
-SOURCE_PATH = "../../../../dataset/clone_detection"
+SOURCE_PATH = "../../../dataset"
+TARGET_PATH = ""
 TRAIN_PREFIX = "train_"
 DEV = "dev_400.txt"
 TEST = "test_1000.txt"
@@ -20,7 +21,7 @@ def get_url2code(lang, name='data.jsonl'):
 def get_clear_folder(folder):
     if os.path.exists(folder):
         shutil.rmtree(folder)
-    os.mkdir(folder)
+    os.makedirs(folder)
     return folder
 
 def change_format(source, target, url_to_code, idx):
@@ -46,9 +47,8 @@ def change_format(source, target, url_to_code, idx):
 
 def gen_dataset(lang, size):
     size = str(size)
-    if not os.path.exists(lang):
-        os.mkdir(lang)
-    folder = get_clear_folder(os.path.join(lang, size))
+    lang_folder = os.path.join(TARGET_PATH, lang)
+    folder = get_clear_folder(os.path.join(lang_folder, size))
     url_to_code = get_url2code(lang)
     idx = 0
     source = os.path.join(SOURCE_PATH, lang, "{}{}.txt".format(TRAIN_PREFIX, size))
@@ -70,13 +70,31 @@ def get_data_list(level=-1, lang=""):
         cmd += " {}".format(lang)
     os.system(cmd)
 
+def gen_test():
+    folder = os.path.join(TARGET_PATH, "Java", "test")
+    if not os.path.exists(folder):
+        os.makedirs(folder)
+    lang = "Java"
+    size = 32
+    url_to_code = get_url2code(lang)
+    source = os.path.join(SOURCE_PATH, lang, "{}{}.txt".format(TRAIN_PREFIX, size))
+    if not os.path.exists(source):
+        print("{}/{}{}.txt needs to be created!".format(lang, TRAIN_PREFIX, size))
+        return
+    change_format(source, os.path.join(folder, "train.jsonl"), url_to_code, 0)
+    os.system("cp {0}/train.jsonl {0}/val.jsonl".format(folder))
+    os.system("cp {0}/train.jsonl {0}/dev32.jsonl".format(folder))
+
 if __name__ == "__main__":
+    TARGET_PATH = "defect_detection"
+    SOURCE_PATH = os.path.join(SOURCE_PATH, TARGET_PATH)
+
+    # gen_test()
     # gen_dataset(lang="Python", size="32")
-    # gen_dataset(lang="JavaScript", size="32")
-    # langs = ["PHP", "Ruby", "Go", "C#", "C++", "C", "Haskell", "Kotlin", "Fortran"]
-    # for lang in langs:
-    #     gen_dataset(lang=lang, size="32")
-    gen_dataset(lang="Java", size=7000)
+    langs = ["Java", "Python", "JavaScript", "PHP", "Ruby", "Go", "C#", "C++", "C", "Haskell", "Kotlin", "Fortran"]
+    for lang in langs:
+        gen_dataset(lang=lang, size="32")
+    gen_dataset(lang="Java", size=10000)
     # for size in [400, 300, 200, 100]:
     #     gen_dataset(lang="Java", size=size)
     # get_data_list(level=-1, lang="")

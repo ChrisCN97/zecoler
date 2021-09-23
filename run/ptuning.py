@@ -32,8 +32,7 @@ def ptuning(
     cmd += "--model_type {} ".format(model_type)
     cmd += "--model_name_or_path {} ".format(model_name_or_path)
     cmd += "--embed_size {} ".format(embed_size)
-    task_map = {"clone_detection": "clonedet"}
-    cmd += "--task_name {} ".format(task_map[task_name])
+    cmd += "--task_name clonedet "
     data_dir = "../method/ptuning/dataset/{}/{}/{}".format(task_name, lang, size)
     if not os.path.exists(data_dir):
         if env != S2:
@@ -44,7 +43,7 @@ def ptuning(
     cmd += "--data_dir {} ".format(data_dir)
     log_path = "output/{}/ptuning/log/{}".format(task_name, output)
     if not os.path.exists(log_path):
-        os.mkdir(log_path)
+        os.makedirs(log_path)
     log = "{}/{}.log".format(log_path, lang)
     output = "output/{}/ptuning/{}".format(task_name, output)
     if zeroshot and \
@@ -76,11 +75,12 @@ def ptuning(
     with open("run.sh", 'w') as f:
         f.write(cmd)
 
-def ptuning_clone_detection_list(task_dicts, env, check_data=False):
+def gen_list(task_dicts, env, check_data=False):
     cmd = ""
     pre_time = 0
     for task in task_dicts:
         c = ptuning(
+            task_name=task["task_name"],
             lang=task["lang"],
             size=task["size"],
             output=task["output"],
@@ -107,19 +107,19 @@ def ptuning_clone_detection_list(task_dicts, env, check_data=False):
         print("conda activate ptuning")
     if env == S3:
         print("conda activate allennlp")
-    print("nohup ./run.sh > output/clone_detection/ptuning/log/task_list.log 2>&1 &".format(cmd))
+    print("nohup ./run.sh > output/{}/ptuning/log/task_list.log 2>&1 &".format(task_dicts[0]["task_name"]))
     h, m = divmod(pre_time, 60)
     print("%dh %02dmin" % (h, m))
 
 if __name__ == "__main__":
     task_dicts = []
     task_dicts.append(
-        {"lang": "Java", "size": 7000, "output": "Java_7000", "do_train": True,
-         "freeze_plm": False, "max_step": 14000, "eval_step": 100, "zeroshot": False})
+        {"task_name": "defect_detection", "lang": "Java", "size": 10000, "output": "Java_10000",
+         "do_train": True, "freeze_plm": False, "max_step": 20000, "eval_step": 200, "zeroshot": False})
     for lang in langs:
         if lang == "Java":
             continue
         task_dicts.append(
-            {"lang": lang, "size": 32, "output": "Java_7000", "do_train": False,
-             "freeze_plm": False, "max_step": 10, "eval_step": 5, "zeroshot": True})
-    ptuning_clone_detection_list(task_dicts, S2, check_data=False)
+            {"task_name": "defect_detection", "lang": lang, "size": 32, "output": "Java_10000",
+             "do_train": False, "freeze_plm": False, "max_step": 10, "eval_step": 5, "zeroshot": True})
+    gen_list(task_dicts, S1, check_data=False)

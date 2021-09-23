@@ -1,9 +1,9 @@
 import json
 import os
-import random
 import shutil
 
-SOURCE_PATH = "../../../../dataset/clone_detection"
+SOURCE_PATH = "../../../dataset"
+TARGET_PATH = ""
 TRAIN_PREFIX = "train_"
 DEV = "dev_400.txt"
 TEST = "test_1000.txt"
@@ -20,7 +20,7 @@ def get_url2code(lang, name='data.jsonl'):
 def get_clear_folder(folder):
     if os.path.exists(folder):
         shutil.rmtree(folder)
-    os.mkdir(folder)
+    os.makedirs(folder)
     return folder
 
 def gen_data_jsonl(data_jsonl_list, folder):
@@ -39,9 +39,8 @@ def trans_file(source, target, url_to_code, data_jsonl_list):
                 f2.write(line)
 
 def gen_dataset(lang, size):
-    if not os.path.exists(lang):
-        os.mkdir(lang)
-    folder = get_clear_folder(os.path.join(lang, size))
+    lang_folder = os.path.join(TARGET_PATH, lang)
+    folder = get_clear_folder(os.path.join(lang_folder, size))
     url_to_code = get_url2code(lang)
     data_jsonl_list = []
     source = os.path.join(SOURCE_PATH, lang, "{}{}.txt".format(TRAIN_PREFIX, size))
@@ -56,10 +55,10 @@ def gen_dataset(lang, size):
     gen_data_jsonl(data_jsonl_list, folder)
 
 def gen_test():
-    os.mkdir("Java/test")
+    folder = os.path.join(TARGET_PATH, "Java", "test")
+    os.mkdir(folder)
     lang = "Java"
     size = 32
-    folder = "Java/test"
     url_to_code = get_url2code(lang)
     data_jsonl_list = []
     source = os.path.join(SOURCE_PATH, lang, "{}{}.txt".format(TRAIN_PREFIX, size))
@@ -67,10 +66,8 @@ def gen_test():
         print("{}/{}{}.txt needs to be created!".format(lang, TRAIN_PREFIX, size))
         return
     trans_file(source, os.path.join(folder, "train.txt"), url_to_code, data_jsonl_list)
-    trans_file(os.path.join(SOURCE_PATH, lang, "{}{}.txt".format(TRAIN_PREFIX, size)),
-               os.path.join(folder, "train.txt"), url_to_code, data_jsonl_list)
-    os.system("cp test/train.txt test/valid.txt")
-    os.system("cp test/train.txt test/test.txt")
+    os.system("cp {0}/train.txt {0}/valid.txt".format(folder))
+    os.system("cp {0}/train.txt {0}/test.txt".format(folder))
     gen_data_jsonl(data_jsonl_list, folder)
 
 def get_data_list(level=-1, lang=""):
@@ -82,10 +79,12 @@ def get_data_list(level=-1, lang=""):
     os.system(cmd)
 
 if __name__ == '__main__':
+    TARGET_PATH = "defect_detection"
+    SOURCE_PATH = os.path.join(SOURCE_PATH, TARGET_PATH)
+
     gen_dataset(lang="Java", size="10000")
-    gen_dataset(lang="Java", size="7000")
     # gen_test()
-    # langs = ["Python", "JavaScript", "PHP", "Ruby", "Go", "C#", "C++", "C", "Haskell", "Kotlin", "Fortran"]
-    # for lang in langs:
-    #     gen_dataset(lang=lang, size="32")
+    langs = ["Java", "Python", "JavaScript", "PHP", "Ruby", "Go", "C#", "C++", "C", "Haskell", "Kotlin", "Fortran"]
+    for lang in langs:
+        gen_dataset(lang=lang, size="32")
     # get_data_list(level=-1, lang="")

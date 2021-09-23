@@ -20,7 +20,7 @@ def get_dataset(method, task, lang, size, from_server):
     source = os.path.join(from_server["root"], "method", method, "dataset", task, lang, str(size))
     target = os.path.join("../method", method, "dataset", task, lang)
     if not os.path.exists(target):
-        os.mkdir(target)
+        os.makedirs(target)
     target = os.path.join(target, str(size))
     scp_get(source, target, from_server["port"])
 
@@ -75,6 +75,6 @@ def ptuning_time_reader(task, output_name):
 
 if __name__ == "__main__":
     # get_output(method="ptuning", task="clone_detection", name="Java_5000", from_server=S1)
-    get_dataset(method="ptuning", task="clone_detection", lang="Java", size="7000", from_server=S2)
-    # plot_loss(folder="output/clone_detection/ptuning/Java_7000_f/p10-i0", name="acc.npy")
-    # log_format("clone_detection", "finetune", "Java_1000", langs)
+    # get_dataset(method="ptuning", task="clone_detection", lang="Java", size="7000", from_server=S2)
+    plot_loss(folder="output/defect_detection/finetune/Java_10000", name="acc.npy")
+    # log_format("clone_detection", "ptuning", "Java_100_f", langs)

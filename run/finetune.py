@@ -46,7 +46,7 @@ def finetune(
     cmd += "--data_folder {} ".format(data_dir)
     log_path = "output/{}/finetune/log/{}".format(task_name, output)
     if not os.path.exists(log_path):
-        os.mkdir(log_path)
+        os.makedirs(log_path)
     log = "{}/{}.log".format(log_path, lang)
     output = "output/{}/finetune/{}".format(task_name, output)
     if do_test and \
@@ -82,11 +82,12 @@ def finetune(
     with open("run.sh", 'w') as f:
         f.write(cmd)
 
-def finetune_clone_detection_list(task_dicts, env, check_data=False):
+def gen_list(task_dicts, env, check_data=False):
     cmd = ""
     pre_time = 0
     for task in task_dicts:
         c = finetune(
+            task_name=task["task_name"],
             lang=task["lang"],
             size=task["size"],
             output=task["output"],
@@ -99,7 +100,10 @@ def finetune_clone_detection_list(task_dicts, env, check_data=False):
             is_part=True)
         cmd += c + "\n"
         if task["do_train"]:
-            pre_time += int(task["epoch"])*int(task["size"])/10*0.011
+            if task["size"] == "test":
+                pre_time += 0
+            else:
+                pre_time += int(task["epoch"])*int(task["size"])/10*0.011
         else:
             pre_time += 0.633
     print(cmd)
@@ -108,19 +112,16 @@ def finetune_clone_detection_list(task_dicts, env, check_data=False):
             f.write(cmd)
     if env == S1:
         print("conda activate ptuning")
-    print("nohup ./run.sh > output/clone_detection/finetune/log/task_list.log 2>&1 &".format(cmd))
+    print("nohup ./run.sh > output/{}/finetune/log/task_list.log 2>&1 &".format(task_dicts[0]["task_name"]))
     h, m = divmod(pre_time, 60)
     print("%dh %02dmin" % (h, m))
 
 if __name__ == "__main__":
-    # task_dicts = [{"lang": "Java", "size": 5000, "output": "Java_5000", "do_train": True, "freeze_plm": False,
-    #                "epoch": 8, "eval_step": 100, "do_test": False}]
     task_dicts = []
-    for item in[(10000,200), (7000,140), (3000,100), (1000,100)]:
-        task_dicts.append({"lang": "Java", "size": item[0], "output": "Java_{}".format(item[0]), "do_train": True,
-                           "freeze_plm": False, "epoch": 20, "eval_step": item[1], "do_test": False})
-        for t_lang in langs:
-            task_dicts.append({"lang": t_lang, "size": 32, "output": "Java_{}".format(item[0]), "do_train": False,
-                               "freeze_plm": False, "epoch": 8, "eval_step": 100, "do_test": True})
-    finetune_clone_detection_list(task_dicts, S2, check_data=False)
+    task_dicts.append({"task_name": "defect_detection", "lang": "Java", "size": 10000, "output": "Java_10000",
+                       "do_train": True, "freeze_plm": False, "epoch": 20, "eval_step": 200, "do_test": False})
+    for t_lang in langs:
+        task_dicts.append({"task_name": "defect_detection", "lang": t_lang, "size": 32, "output": "Java_10000",
+                           "do_train": False, "freeze_plm": False, "epoch": 8, "eval_step": 100, "do_test": True})
+    gen_list(task_dicts, S2, check_data=False)
 
