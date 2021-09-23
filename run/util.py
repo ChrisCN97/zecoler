@@ -76,5 +76,5 @@ def ptuning_time_reader(task, output_name):
 if __name__ == "__main__":
     # get_output(method="ptuning", task="clone_detection", name="Java_5000", from_server=S1)
     # get_dataset(method="ptuning", task="clone_detection", lang="Java", size="7000", from_server=S2)
-    plot_loss(folder="output/defect_detection/finetune/Java_10000", name="acc.npy")
-    # log_format("clone_detection", "ptuning", "Java_100_f", langs)
+    plot_loss(folder="output/defect_detection/ptuning/Java_10000/p10-i0", name="acc.npy")
+    # log_format("defect_detection", "ptuning", "Java_10000", langs)

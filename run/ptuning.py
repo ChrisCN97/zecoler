@@ -113,13 +113,15 @@ def gen_list(task_dicts, env, check_data=False):
 
 if __name__ == "__main__":
     task_dicts = []
-    task_dicts.append(
-        {"task_name": "defect_detection", "lang": "Java", "size": 10000, "output": "Java_10000",
-         "do_train": True, "freeze_plm": False, "max_step": 20000, "eval_step": 200, "zeroshot": False})
-    for lang in langs:
-        if lang == "Java":
-            continue
-        task_dicts.append(
-            {"task_name": "defect_detection", "lang": lang, "size": 32, "output": "Java_10000",
-             "do_train": False, "freeze_plm": False, "max_step": 10, "eval_step": 5, "zeroshot": True})
-    gen_list(task_dicts, S1, check_data=False)
+    for task in ["defect_detection"]:
+        for size, step in [(10000,200),(7000,200),(5000,100),(3000,100),(1000,100)]:
+            task_dicts.append(
+                {"task_name": task, "lang": "Java", "size": size, "output": "Java_{}".format(size),
+                 "do_train": True, "freeze_plm": False, "max_step": size, "eval_step": step, "zeroshot": False})
+            for lang in langs:
+                if lang == "Java":
+                    continue
+                task_dicts.append(
+                    {"task_name": task, "lang": lang, "size": 32, "output": "Java_{}".format(size),
+                     "do_train": False, "freeze_plm": False, "max_step": 10, "eval_step": 5, "zeroshot": True})
+    gen_list(task_dicts, S2, check_data=False)

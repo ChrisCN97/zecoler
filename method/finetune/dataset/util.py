@@ -56,7 +56,7 @@ def gen_dataset(lang, size):
 
 def gen_test():
     folder = os.path.join(TARGET_PATH, "Java", "test")
-    os.mkdir(folder)
+    os.makedirs(folder)
     lang = "Java"
     size = 32
     url_to_code = get_url2code(lang)
@@ -79,12 +79,14 @@ def get_data_list(level=-1, lang=""):
     os.system(cmd)
 
 if __name__ == '__main__':
-    TARGET_PATH = "defect_detection"
+    TARGET_PATH = "code_search"
     SOURCE_PATH = os.path.join(SOURCE_PATH, TARGET_PATH)
 
-    gen_dataset(lang="Java", size="10000")
+    # gen_dataset(lang="Java", size="10000")
     # gen_test()
     langs = ["Java", "Python", "JavaScript", "PHP", "Ruby", "Go", "C#", "C++", "C", "Haskell", "Kotlin", "Fortran"]
     for lang in langs:
         gen_dataset(lang=lang, size="32")
+    for size in [7000, 5000, 3000, 1000]:
+        gen_dataset(lang="Java", size=str(size))
     # get_data_list(level=-1, lang="")

@@ -118,10 +118,14 @@ def gen_list(task_dicts, env, check_data=False):
 
 if __name__ == "__main__":
     task_dicts = []
-    task_dicts.append({"task_name": "defect_detection", "lang": "Java", "size": 10000, "output": "Java_10000",
-                       "do_train": True, "freeze_plm": False, "epoch": 20, "eval_step": 200, "do_test": False})
-    for t_lang in langs:
-        task_dicts.append({"task_name": "defect_detection", "lang": t_lang, "size": 32, "output": "Java_10000",
-                           "do_train": False, "freeze_plm": False, "epoch": 8, "eval_step": 100, "do_test": True})
+    for task in ["defect_detection", "code_search"]:
+        for size, eval_step in [(10000,200),(7000,200),(5000,100),(3000,100),(1000,100)]:
+            if task == "defect_detection" and size == 10000:
+                continue
+            task_dicts.append({"task_name": task, "lang": "Java", "size": size, "output": "Java_{}".format(size),
+                               "do_train": True, "freeze_plm": False, "epoch": 10, "eval_step": eval_step, "do_test": False})
+            for t_lang in langs:
+                task_dicts.append({"task_name": task, "lang": t_lang, "size": 32, "output": "Java_{}".format(size),
+                                   "do_train": False, "freeze_plm": False, "epoch": 8, "eval_step": 8, "do_test": True})
     gen_list(task_dicts, S2, check_data=False)
 

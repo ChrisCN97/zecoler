@@ -231,3 +231,5 @@ if __name__ == "__main__":
     # for lang in ["Python", "JavaScript", "PHP", "Ruby", "Go", "C#", "C++", "C", "Haskell", "Kotlin", "Fortran"]:
     #         gen_train(lang=lang, size=32)
     # gen_train(lang="Java", size=10000)
+    for size in [7000,5000,3000,1000]:
+        gen_train(lang="Java", size=size)

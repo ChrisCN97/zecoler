@@ -1,4 +1,4 @@
-## Directory structure and naming convention
+## Code Net: Directory structure and naming convention
 
 The data and metadata are organized in a rigorous directory structure. At the top level sits the `Project CodeNet` directory with several sub-directories, `data`, `metadata`, and `problem_descriptions`:
 
