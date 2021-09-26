@@ -78,15 +78,17 @@ def get_data_list(level=-1, lang=""):
         cmd += " {}".format(lang)
     os.system(cmd)
 
+
+
 if __name__ == '__main__':
-    TARGET_PATH = "code_search"
+    TARGET_PATH = "clone_detection"
     SOURCE_PATH = os.path.join(SOURCE_PATH, TARGET_PATH)
 
-    # gen_dataset(lang="Java", size="10000")
+    # gen_dataset(lang="Devign", size="32")
+    for size in [5000]:
+        gen_dataset(lang="BCBs", size=str(size))
     # gen_test()
-    langs = ["Java", "Python", "JavaScript", "PHP", "Ruby", "Go", "C#", "C++", "C", "Haskell", "Kotlin", "Fortran"]
-    for lang in langs:
-        gen_dataset(lang=lang, size="32")
-    for size in [7000, 5000, 3000, 1000]:
-        gen_dataset(lang="Java", size=str(size))
+    # langs = ["Java", "Python", "JavaScript", "PHP", "Ruby", "Go", "C#", "C++", "C", "Haskell", "Kotlin", "Fortran"]
+    # for lang in langs:
+    #     gen_dataset(lang=lang, size="32")
     # get_data_list(level=-1, lang="")

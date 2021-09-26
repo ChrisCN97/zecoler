@@ -113,15 +113,50 @@ def gen_list(task_dicts, env, check_data=False):
 
 if __name__ == "__main__":
     task_dicts = []
-    for task in ["defect_detection"]:
-        for size, step in [(10000,200),(7000,200),(5000,100),(3000,100),(1000,100)]:
+    for task in ["clone_detection"]:
+        # for size, step in [(3000,6000),(700,1400)]:
+        #     task_dicts.append(
+        #         {"task_name": task, "lang": "Java", "size": size, "output": "Java_{}".format(size),
+        #          "do_train": True, "freeze_plm": False, "max_step": step, "eval_step": 100, "zeroshot": False})
+        #     for lang in langs:
+        #         if lang == "Java":
+        #             continue
+        #         task_dicts.append(
+        #             {"task_name": task, "lang": lang, "size": 32, "output": "Java_{}".format(size),
+        #              "do_train": False, "freeze_plm": False, "max_step": 8, "eval_step": 8, "zeroshot": True})
+        for size, step, eval in [(32,300,10)]:
             task_dicts.append(
-                {"task_name": task, "lang": "Java", "size": size, "output": "Java_{}".format(size),
-                 "do_train": True, "freeze_plm": False, "max_step": size, "eval_step": step, "zeroshot": False})
+                {"task_name": task, "lang": "BCB", "size": size, "output": "BCB_{}_b".format(size),
+                 "do_train": True, "freeze_plm": False, "max_step": step, "eval_step": eval, "zeroshot": False})
             for lang in langs:
                 if lang == "Java":
                     continue
                 task_dicts.append(
-                    {"task_name": task, "lang": lang, "size": 32, "output": "Java_{}".format(size),
-                     "do_train": False, "freeze_plm": False, "max_step": 10, "eval_step": 5, "zeroshot": True})
-    gen_list(task_dicts, S2, check_data=False)
+                    {"task_name": task, "lang": lang, "size": 32, "output": "BCB_{}_b".format(size),
+                     "do_train": False, "freeze_plm": False, "max_step": 8, "eval_step": 8, "zeroshot": True})
+    # for task in ["defect_detection"]:
+    #     for size, step in [(100,1000),(300,1000),(500,1000),(700,1400)]:
+    #         task_dicts.append(
+    #             {"task_name": task, "lang": "Java", "size": size, "output": "Java_{}".format(size),
+    #              "do_train": True, "freeze_plm": False, "max_step": step, "eval_step": 100, "zeroshot": False})
+    #     for size, step in [(100,1000),(500,1000),(1000,2000),(3000,6000)]:
+    #         task_dicts.append(
+    #             {"task_name": task, "lang": "Devign", "size": size, "output": "Devign_{}".format(size),
+    #              "do_train": True, "freeze_plm": False, "max_step": step, "eval_step": 100, "zeroshot": False})
+    # for task in ["code_search"]:
+    #     for size, step in [(100,1000),(300,1000),(500,1000),(700,1400),(1000,2000)]:
+    #         task_dicts.append(
+    #             {"task_name": task, "lang": "Java", "size": size, "output": "Java_{}".format(size),
+    #              "do_train": True, "freeze_plm": False, "max_step": step, "eval_step": 100, "zeroshot": False})
+    #         for lang in langs:
+    #             if lang == "Java":
+    #                 continue
+    #             task_dicts.append(
+    #                 {"task_name": task, "lang": lang, "size": 32, "output": "Java_{}".format(size),
+    #                  "do_train": False, "freeze_plm": False, "max_step": 8, "eval_step": 8, "zeroshot": True})
+        # for size, step in [(100,1000),(500,1000),(1000,2000),(3000,6000)]:
+        #     task_dicts.append(
+        #         {"task_name": task, "lang": "CSN", "size": size, "output": "CSN_{}".format(size),
+        #          "do_train": True, "freeze_plm": False, "max_step": step, "eval_step": 100, "zeroshot": False})
+    gen_list(task_dicts, S1, check_data=False)
+    # s1 13708 output/clone_detection/ptuning/log/task_list.log

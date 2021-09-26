@@ -4,7 +4,6 @@ import random
 import shutil
 import matplotlib.pyplot as plt
 import numpy as np
-import sys
 
 CODENET_PATH = "/mnt/sda/cn/python/codeBert/codeNet/Project_CodeNet/data"
 
@@ -273,6 +272,53 @@ def get_data_list(level=-1, lang=""):
         cmd += " {}".format(lang)
     os.system(cmd)
 
+def process_BCBs():
+    p_list = []
+    n_list = []
+    data_jsonl_list = []
+    dataset_list = []
+    url_to_code = {}
+    with open("BCBs/data.jsonl") as f:
+        for line in f:
+            line = line.strip()
+            js = json.loads(line)
+            url_to_code[js['idx']] = code_preprocess(js['func'])
+    with open("BCBs/train.txt") as f:
+        for line in f:
+            ls = line.split()
+            i1 = ls[0]
+            i2 = ls[1]
+            label = ls[2]
+            if i1 not in url_to_code or i2 not in url_to_code:
+                print(1)
+                continue
+            if label == "1":
+                p_list.append(line)
+            else:
+                n_list.append(line)
+    m_len = min(len(p_list), len(n_list))
+    if len(p_list) > m_len:
+        p_list = random.sample(p_list, m_len)
+    if len(n_list) > m_len:
+        n_list = random.sample(n_list, m_len)
+    p_list.extend(n_list)
+    for line in p_list:
+        dataset_list.append(line)
+    for idx, code in url_to_code.items():
+        data_jsonl_list.append({"func": code, "idx": idx})
+    folder = "BCBs"
+    gen_data_jsonl(data_jsonl_list, folder)
+    size_txt = "total_{}.txt".format(len(dataset_list))
+    with open(os.path.join(folder, size_txt), 'w') as f:
+        random.shuffle(dataset_list)
+        f.write("".join(dataset_list))
+    print("data.jsonl: {}, {}".format(len(data_jsonl_list), size_txt))
+    lang = "BCBs"
+    train_txt = split_txt(lang, source=size_txt, target1="temp", size=1400, target2="train")
+    split_txt(lang, source="temp_1400.txt", target1="dev", size=400, target2="test")
+    os.system("rm {}/temp_1400.txt".format(lang))
+    os.system("mv {0}/{1} {0}/train.txt".format(lang, train_txt))
+
 if __name__ == '__main__':
     MIN_SIZE = 690
     langs_need = ["Java", "Python", "C++"]
@@ -288,9 +334,8 @@ if __name__ == '__main__':
     #          'Kotlin', 'Lua', 'Erlang', 'Standard ML', 'Bf', 'Prolog', 'Crystal', 'Nim', 'Ruby', 'D', 'Pascal', 'Forth',
     #          'Go', 'C++', 'Cython', 'Bash']
 
-    # gen_train(lang="Java", size=7000)
-    # gen_train(lang="Java", size=10000)
-
-    # check_trainrepeat_pnrate(lang, name="dev_400.txt")
-    check_example(lang="C", name="test_1000.txt")
+    # gen_train(lang="BCBs", size=5000)
+    # process_BCBs()
+    check_trainrepeat_pnrate(lang="BCBs", name="train_5000.txt")
+    # check_example(lang="C", name="test_1000.txt")
     # get_data_list(level=-1, lang="")

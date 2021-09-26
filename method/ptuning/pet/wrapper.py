@@ -365,9 +365,9 @@ class TransformerModelWrapper:
         dev32_scores = self.eval_dev(dev32_data, eval_config, n_gpu)
         logger.info(dev32_scores)
 
-        logger.info("eval_data performance before training.")
-        dev_scores = self.eval_dev(eval_data, eval_config, n_gpu)
-        logger.info(dev_scores)
+        # logger.info("eval_data performance before training.")
+        # dev_scores = self.eval_dev(eval_data, eval_config, n_gpu)
+        # logger.info(dev_scores)
 
         train_iterator = trange(int(num_train_epochs), desc="Epoch")
         loss_list = np.array([])

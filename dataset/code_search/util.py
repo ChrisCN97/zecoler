@@ -235,13 +235,50 @@ def check_trainrepeat_pnrate(lang, name):
             total += 1
     print("Pnrate: total:{} positive:{} rate:{:.3f}".format(total, positive, positive / total))
 
+def process_CSN():
+    dataset_list = []
+    data_jsonl_list = []
+    pair_list = []
+    idx = 1
+    with open("CSN/train.jsonl") as f:
+        for line in f:
+            line = line.strip()
+            js = json.loads(line)
+            code = code_preprocess(js['code'])
+            doc = code_preprocess(js['docstring'])
+            if 300 < len(code) < 600 and 300 < len(doc) < 600:
+                pair_list.append((idx, idx+1))
+                dataset_list.append("\t".join([str(idx), str(idx+1), "1"]))
+                data_jsonl_list.append({"func": doc, "idx": str(idx)})
+                data_jsonl_list.append({"func": code, "idx": str(idx+1)})
+                idx += 2
+    for doc_i, code_i in pair_list:
+        while True:
+            d2, c2 = random.choice(pair_list)
+            if c2 != code_i:
+                break
+        dataset_list.append("\t".join([str(doc_i), str(c2), "0"]))
+    folder = "CSN"
+    gen_data_jsonl(data_jsonl_list, folder)
+    size_txt = "total_{}.txt".format(len(dataset_list))
+    with open(os.path.join(folder, size_txt), 'w') as f:
+        random.shuffle(dataset_list)
+        f.write("\n".join(dataset_list))
+    print("data.jsonl: {}, {}".format(len(data_jsonl_list), size_txt))
+    lang = "CSN"
+    train_txt = split_txt(lang, source=size_txt, target1="temp", size=1400, target2="train")
+    split_txt(lang, source="temp_1400.txt", target1="dev", size=400, target2="test")
+    os.system("rm {}/temp_1400.txt".format(lang))
+    os.system("mv {0}/{1} {0}/train.txt".format(lang, train_txt))
+
+
 if __name__ == "__main__":
     # get_qualified_prob_list()
     # lang = "Java"
-    for size in [7000,5000,3000,1000]:
-        gen_train(lang="Java", size=size)
-    langs = ["Java", "Python", "JavaScript", "PHP", "Ruby", "Go", "C#", "C++", "C", "Haskell", "Kotlin", "Fortran"]
-    for lang in langs:
-        gen_train(lang, size=32)
-    # check_trainrepeat_pnrate(lang=lang, name="total_25816.txt")
+    # for size in [32,100,500,1000,3000]:
+    #     gen_train(lang="CSN", size=size)
+    # langs = ["Java", "Python", "JavaScript", "PHP", "Ruby", "Go", "C#", "C++", "C", "Haskell", "Kotlin", "Fortran"]
+    # for lang in langs:
+    #     gen_train(lang, size=32)
+    check_trainrepeat_pnrate(lang="CSN", name="train_3000.txt")
     # check_example(lang, name="train.txt")

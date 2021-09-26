@@ -211,6 +211,51 @@ def check_repeat(lang, s1, s2):
                 c += 1
     print(c)
 
+def process_devign():
+    p_list = []
+    n_list = []
+    data_jsonl_list = []
+    data_jsonl_list.append({"func": ".", "idx": "empty"})
+    with open("Devign/train.jsonl") as f:
+        for line in f:
+            line = line.strip()
+            js = json.loads(line)
+            code = code_preprocess(js['func'])
+            idx = js['idx']
+            label = js['target']
+            if label == 1:
+                is_true = True
+            else:
+                is_true = False
+            if 200 < len(code) < 700:
+                if is_true:
+                    p_list.append((code, idx, label))
+                else:
+                    n_list.append((code, idx, label))
+    m_len = min(len(p_list), len(n_list))
+    if len(p_list) > m_len:
+        p_list = random.sample(p_list, m_len)
+    if len(n_list) > m_len:
+        n_list = random.sample(n_list, m_len)
+    p_list.extend(n_list)
+    dataset_list = []
+    for code, idx, label in p_list:
+        dataset_list.append("\t".join([str(idx), "empty", str(label)]))
+        data_jsonl_list.append({"func": code, "idx": str(idx)})
+    random.shuffle(dataset_list)
+    folder = "Devign"
+    gen_data_jsonl(data_jsonl_list, folder)
+    size_txt = "total_{}.txt".format(len(dataset_list))
+    with open(os.path.join(folder, size_txt), 'w') as f:
+        random.shuffle(dataset_list)
+        f.write("\n".join(dataset_list))
+    print("data.jsonl: {}, {}".format(len(data_jsonl_list), size_txt))
+    lang = "Devign"
+    train_txt = split_txt(lang, source=size_txt, target1="temp", size=1400, target2="train")
+    split_txt(lang, source="temp_1400.txt", target1="dev", size=400, target2="test")
+    os.system("rm {}/temp_1400.txt".format(lang))
+    os.system("mv {0}/{1} {0}/train.txt".format(lang, train_txt))
+
 """
 Compile Error          | CE  |  0
 Memory Limit Exceeded  | MLE |  3
@@ -225,11 +270,11 @@ if __name__ == "__main__":
     # example(lang="Java", status="Runtime Error")
     # size_txt = get_qualified_submission_id_list(lang="Java", status_list=status_list,
     #                                  code_lem_min=300, code_lem_max=600, limit=-1)
-    # check_trainrepeat_pnrate(lang="Java", name=size_txt)
+    # check_trainrepeat_pnrate(lang="Devign", name="test_1000.txt")
     # check_example(lang="Java", name="total_76662.txt")
     # check_repeat(lang="Java", s1="train.txt", s2="train_32.txt")
     # for lang in ["Python", "JavaScript", "PHP", "Ruby", "Go", "C#", "C++", "C", "Haskell", "Kotlin", "Fortran"]:
     #         gen_train(lang=lang, size=32)
-    # gen_train(lang="Java", size=10000)
-    for size in [7000,5000,3000,1000]:
-        gen_train(lang="Java", size=size)
+    gen_train(lang="Devign", size=32)
+    # for size in [100,500,1000,3000]:
+    #     gen_train(lang="Devign", size=size)

@@ -107,8 +107,10 @@ def convert_examples_to_features(code1_tokens,code2_tokens,label,url1,url2,token
     #source
     code1_tokens=code1_tokens[:args.block_size-2]
     code1_tokens =[tokenizer.cls_token]+code1_tokens+[tokenizer.sep_token]
-    code2_tokens=code2_tokens[:args.block_size-2]
-    code2_tokens =[tokenizer.cls_token]+code2_tokens+[tokenizer.sep_token]  
+    # code2_tokens=code2_tokens[:args.block_size-2]  # 分开
+    # code2_tokens =[tokenizer.cls_token]+code2_tokens+[tokenizer.sep_token]  # 分开
+    code2_tokens = code2_tokens[:args.block_size - 1]  # 合并
+    code2_tokens = code2_tokens + [tokenizer.sep_token]  # 合并
     
     code1_ids=tokenizer.convert_tokens_to_ids(code1_tokens)
     padding_length = args.block_size - len(code1_ids)
