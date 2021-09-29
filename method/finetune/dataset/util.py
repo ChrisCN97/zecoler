@@ -81,12 +81,12 @@ def get_data_list(level=-1, lang=""):
 
 
 if __name__ == '__main__':
-    TARGET_PATH = "clone_detection"
+    TARGET_PATH = "defect_detection"
     SOURCE_PATH = os.path.join(SOURCE_PATH, TARGET_PATH)
 
-    # gen_dataset(lang="Devign", size="32")
-    for size in [5000]:
-        gen_dataset(lang="BCBs", size=str(size))
+    # gen_dataset(lang="BCBs", size="90000")
+    for size in [100,300,500,700]:
+        gen_dataset(lang="Devign", size=str(size))
     # gen_test()
     # langs = ["Java", "Python", "JavaScript", "PHP", "Ruby", "Go", "C#", "C++", "C", "Haskell", "Kotlin", "Fortran"]
     # for lang in langs:

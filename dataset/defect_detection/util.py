@@ -227,7 +227,7 @@ def process_devign():
                 is_true = True
             else:
                 is_true = False
-            if 200 < len(code) < 700:
+            if 100 < len(code) < 1200:
                 if is_true:
                     p_list.append((code, idx, label))
                 else:
@@ -275,6 +275,7 @@ if __name__ == "__main__":
     # check_repeat(lang="Java", s1="train.txt", s2="train_32.txt")
     # for lang in ["Python", "JavaScript", "PHP", "Ruby", "Go", "C#", "C++", "C", "Haskell", "Kotlin", "Fortran"]:
     #         gen_train(lang=lang, size=32)
-    gen_train(lang="Devign", size=32)
-    # for size in [100,500,1000,3000]:
-    #     gen_train(lang="Devign", size=size)
+    # gen_train(lang="Devign", size=32)
+    for size in [100,300,500,700]:
+        gen_train(lang="Devign", size=size)
+    # process_devign()

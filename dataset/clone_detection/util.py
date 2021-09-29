@@ -334,8 +334,8 @@ if __name__ == '__main__':
     #          'Kotlin', 'Lua', 'Erlang', 'Standard ML', 'Bf', 'Prolog', 'Crystal', 'Nim', 'Ruby', 'D', 'Pascal', 'Forth',
     #          'Go', 'C++', 'Cython', 'Bash']
 
-    # gen_train(lang="BCBs", size=5000)
+    gen_train(lang="BCBs", size=90000)
     # process_BCBs()
-    check_trainrepeat_pnrate(lang="BCBs", name="train_5000.txt")
+    # check_trainrepeat_pnrate(lang="BCBs", name="train_5000.txt")
     # check_example(lang="C", name="test_1000.txt")
     # get_data_list(level=-1, lang="")

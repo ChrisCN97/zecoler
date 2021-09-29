@@ -86,12 +86,12 @@ def gen_test():
     os.system("cp {0}/train.jsonl {0}/dev32.jsonl".format(folder))
 
 if __name__ == "__main__":
-    TARGET_PATH = "clone_detection"
+    TARGET_PATH = "defect_detection"
     SOURCE_PATH = os.path.join(SOURCE_PATH, TARGET_PATH)
 
     # gen_test()
-    for size in [32,5000]:
-        gen_dataset(lang="BCBs", size=str(size))
+    for size in [100,300,500,700]:
+        gen_dataset(lang="Devign", size=str(size))
     # langs = ["Java", "Python", "JavaScript", "PHP", "Ruby", "Go", "C#", "C++", "C", "Haskell", "Kotlin", "Fortran"]
     # for lang in langs:
     #     gen_dataset(lang=lang, size="32")
