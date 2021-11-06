@@ -40,7 +40,12 @@ def plot_loss(folder, name):
 
 def ptuning_log_reader(f):
     res_line = f.readlines()[-6]
-    return re.search(r"\d.\d*", res_line).group()
+    res = "null"
+    try:
+        res = re.search(r"\d.\d*", res_line).group()
+    except AttributeError:
+        pass
+    return res
 
 def finetune_log_reader(f):
     res_line = f.read()
@@ -51,6 +56,8 @@ def log_checker(task, method, output_name):
     logs = os.listdir(log_folder)
     log_dict = dict()
     for log in logs:
+        if log.split(".")[-1] != "log":
+            continue
         lang = log.split(".")[0]
         with open(os.path.join(log_folder, log)) as f:
             if method == "ptuning":
@@ -76,6 +83,7 @@ def ptuning_time_reader(task, output_name):
 if __name__ == "__main__":
     # get_output(method="finetune", task="clone_detection", name="Java_10000_b", from_server=S2)
     # get_dataset(method="ptuning", task="clone_detection", lang="Java", size="7000", from_server=S2)
-    # plot_loss(folder="output/code_search/ptuning/Java_7000/p10-i0", name="acc.npy")
-    # plot_loss(folder="output/clone_detection/finetune/Java_5000_c_f", name="acc.npy")
-    log_format("clone_detection", "finetune", "Java_7000_b", langs=["C++", "C"])
+    # plot_loss(folder="output/clone_detection/ptuning/Java_700_p_f/p1-i0", name="acc.npy")
+    # plot_loss(folder="output/clone_detection/finetune/Java_100", name="acc.npy")
+    for size in [1000,700,500,300,100]:
+        log_format("name_predict", "ptuning", "Java_{}".format(size), langs=["SC"])

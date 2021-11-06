@@ -17,7 +17,7 @@ def gen_dataset(lang, folder, min_code_len, max_code_len):
             js = json.loads(line)
             code = code_preprocess(js['code'], lang)
             doc = txt_preprocess(js['func_name'])
-            if min_code_len < len(code) + len(doc) < max_code_len:
+            if len(code) > 0 and len(doc) > 0 and min_code_len < len(code) + len(doc) < max_code_len:
                 pair_list.append((idx, idx + 1))
                 dataset_list.append("\t".join([str(idx), str(idx + 1), "1"]))
                 data_jsonl_list.append({"func": doc, "idx": str(idx)})
@@ -145,8 +145,9 @@ def get_url2code(lang, name='data.jsonl'):
     return url_to_code
 
 if __name__ == "__main__":
-    # check_example(lang="Go", name="train.txt")
+    # check_example(lang="Java", name="train.txt")
     # for lang, folder in [("python", "Python"), ("go", "Go"), ("javascript", "JavaScript")]:
     #     gen_dataset(lang, folder, min_code_len=800, max_code_len=1000)
-    for size in [32]:
-        gen_train(lang="JavaScript", size=size)
+    for size in [32,100,300,500,700,1000,3000,5000,7000,10000]:
+        gen_train(lang="SC", size=size)
+    # gen_dataset(lang="javascript", folder="JavaScript", min_code_len=700, max_code_len=900)

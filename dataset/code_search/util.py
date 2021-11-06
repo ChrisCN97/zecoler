@@ -235,6 +235,13 @@ def check_trainrepeat_pnrate(lang, name):
             total += 1
     print("Pnrate: total:{} positive:{} rate:{:.3f}".format(total, positive, positive / total))
 
+def python_code_preprocess(code):
+    code = re.sub(r"#.*", '', code)
+    code = re.sub(r"'''.*'''", '', code, flags=re.S)
+    code = re.sub(r"\"\"\".*\"\"\"", '', code, flags=re.S)
+    code = code_preprocess(code)
+    return code
+
 def process_CSN():
     dataset_list = []
     data_jsonl_list = []
@@ -244,7 +251,7 @@ def process_CSN():
         for line in f:
             line = line.strip()
             js = json.loads(line)
-            code = code_preprocess(js['code'])
+            code = python_code_preprocess(js['code'])
             doc = code_preprocess(js['docstring'])
             if 300 < len(code) < 600 and 300 < len(doc) < 600:
                 pair_list.append((idx, idx+1))
@@ -275,10 +282,10 @@ def process_CSN():
 if __name__ == "__main__":
     # get_qualified_prob_list()
     # lang = "Java"
-    # for size in [5000,7000,10000]:
-    #     gen_train(lang="CSN", size=size)
+    # for size in [32,100,300,500,700,1000,3000,5000,7000,10000]:
+    #     gen_train(lang="SC", size=size)
     # langs = ["Java", "Python", "JavaScript", "PHP", "Ruby", "Go", "C#", "C++", "C", "Haskell", "Kotlin", "Fortran"]
     # for lang in langs:
     #     gen_train(lang, size=32)
-    check_trainrepeat_pnrate(lang="CSN", name="train_10000.txt")
-    # check_example(lang, name="train.txt")
+    # check_trainrepeat_pnrate(lang="SC", name="train.txt")
+    check_example(lang="SC", name="train.txt")

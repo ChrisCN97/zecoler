@@ -5,8 +5,10 @@ import os
 langs = ["Java", "Python", "JavaScript", "PHP", "Ruby", "Go", "C#", "C++", "C", "Haskell", "Kotlin", "Fortran"]
 
 def ptuning(
-        model_type="roberta",
-        model_name_or_path="microsoft/codebert-base",
+        model_type="gpt2",
+        model_name_or_path="microsoft/CodeGPT-small-java",
+        # model_type="roberta",
+        # model_name_or_path="microsoft/codebert-base",
         embed_size=768,
         task_name="clone_detection",
         lang="Java",
@@ -80,6 +82,10 @@ def gen_list(task_dicts, env, check_data=False):
     cmd = ""
     pre_time = 0
     for task in task_dicts:
+        if "pattern_ids" in task:
+            pattern_ids = task["pattern_ids"]
+        else:
+            pattern_ids = 10
         c = ptuning(
             task_name=task["task_name"],
             lang=task["lang"],
@@ -90,6 +96,7 @@ def gen_list(task_dicts, env, check_data=False):
             max_step=task["max_step"],
             eval_step=task["eval_step"],
             zeroshot=task["zeroshot"],
+            pattern_ids=pattern_ids,
             env=env,
             is_part=True)
         cmd += c + "\n"
@@ -114,31 +121,43 @@ def gen_list(task_dicts, env, check_data=False):
 
 if __name__ == "__main__":
     task_dicts = []
+    # [(100,1000,100),(300,1000,100),(500,1000,100),(700,1400,100),(1000,2000,100),
+    # (3000,6000,100),(5000,10000,200),(7000,14000,200),(10000,20000,200)]
     for task in ["clone_detection"]:
-        for size, step, eval in [(300,1000,100),(700,1400,100)]:
+        # s2
+        for prompt in [10]:
             task_dicts.append(
-                {"task_name": task, "lang": "BCB", "size": size, "output": "BCB_{}".format(size),
-                 "do_train": True, "freeze_plm": False, "max_step": step, "eval_step": eval, "zeroshot": False})
-    for task in ["defect_detection"]:
-        for size, step, eval in [(1000,2000,100)]:
-            task_dicts.append(
-                {"task_name": task, "lang": "Java", "size": size, "output": "Java_{}".format(size),
-                 "do_train": True, "freeze_plm": False, "max_step": step, "eval_step": eval, "zeroshot": False})
-        for size, step, eval in [(100,1000,100),(300,1000,100),(500,1000,100),(700,1400,100),(7000,14000,200),
-                                 (10000,20000,200)]:
-            task_dicts.append(
-                {"task_name": task, "lang": "Devign", "size": size, "output": "Devign_{}".format(size),
-                 "do_train": True, "freeze_plm": False, "max_step": step, "eval_step": eval, "zeroshot": False})
-    for task in ["code_search"]:
-        for size, step, eval in [(3000, 6000, 100),(5000, 10000, 200),(7000, 14000, 200),(10000, 20000, 200)]:
-            task_dicts.append(
-                {"task_name": task, "lang": "Java", "size": size, "output": "Java_{}_2".format(size),
-                 "do_train": True, "freeze_plm": False, "max_step": step, "eval_step": eval, "zeroshot": False})
-            for t_lang in langs:
-                if t_lang == "Java":
-                    continue
-                task_dicts.append(
-                    {"task_name": task, "lang": t_lang, "size": 32, "output": "Java_{}_2".format(size),
-                     "do_train": False, "freeze_plm": False, "max_step": 8, "eval_step": 8, "zeroshot": True})
-    gen_list(task_dicts, S1, check_data=False)
-    # s1 2899 output/clone_detection/ptuning/log/task_list.log 10.30 23:00
+                {"task_name": task, "lang": "Java", "size": "test", "output": "Java_test_g",
+                 "do_train": True, "freeze_plm": False, "max_step": 10, "eval_step": 5, "zeroshot": False,
+                 "pattern_ids": prompt})
+        # for size, step, eval in [(100,1000,100),(300,1000,100),(500,1000,100),(700,1400,100),(1000,2000,100),
+        #                          (3000,6000,100),(5000,10000,200),(7000,14000,200),(10000,20000,200)]:
+        #     task_dicts.append(
+        #         {"task_name": task, "lang": "SC", "size": size, "output": "SC_{}".format(size),
+        #          "do_train": True, "freeze_plm": False, "max_step": step, "eval_step": eval, "zeroshot": False})
+    # for task in ["code_search"]:
+    #     s1
+    #     for size in [100, 300, 500, 700, 1000]:
+    #         task_dicts.append(
+    #             {"task_name": task, "lang": "SC", "size": 32, "output": "Java_{}".format(size),
+    #              "do_train": False, "freeze_plm": False, "max_step": 8, "eval_step": 8, "zeroshot": True})
+    #     for size in [3000, 5000, 7000, 10000]:
+    #         task_dicts.append(
+    #             {"task_name": task, "lang": "SC", "size": 32, "output": "Java_{}_2".format(size),
+    #              "do_train": False, "freeze_plm": False, "max_step": 8, "eval_step": 8, "zeroshot": True})
+    #     for size, step, eval in [(100,1000,100),(300,1000,100),(500,1000,100),(700,1400,100),(1000, 2000, 100)]:
+    #         task_dicts.append(
+    #             {"task_name": task, "lang": "SC", "size": size, "output": "SC_{}".format(size),
+    #              "do_train": True, "freeze_plm": False, "max_step": step, "eval_step": eval, "zeroshot": False})
+    # for task in ["name_predict"]:
+    #     for size, step, eval in [(3000,6000,100),(5000,10000,200),(7000,14000,200)]:
+    #         # task_dicts.append(
+    #         #     {"task_name": task, "lang": "SC", "size": size, "output": "SC_{}".format(size),
+    #         #      "do_train": True, "freeze_plm": False, "max_step": step, "eval_step": eval, "zeroshot": False})
+    #         task_dicts.append(
+    #             {"task_name": task, "lang": "SC", "size": 32, "output": "Java_{}".format(size),
+    #              "do_train": False, "freeze_plm": False, "max_step": 8, "eval_step": 8, "zeroshot": True})
+
+    gen_list(task_dicts, S2, check_data=False)
+    # s1 1804 output/clone_detection/ptuning/log/task_list.log 11.4 14:30
+

@@ -81,12 +81,14 @@ def get_data_list(level=-1, lang=""):
 
 
 if __name__ == '__main__':
-    TARGET_PATH = "defect_detection"
+    TARGET_PATH = "name_predict"
     SOURCE_PATH = os.path.join(SOURCE_PATH, TARGET_PATH)
 
-    # gen_dataset(lang="BCBs", size="90000")
-    for size in [100,300,500,700]:
-        gen_dataset(lang="Devign", size=str(size))
+    for size in [7000, 5000, 3000, 1000, 700, 500, 300, 100, 32]:
+        gen_dataset(lang="SC", size=str(size))
+    # for lang in ["Python", "JavaScript", "Go"]:
+    #     gen_dataset(lang=lang, size="32")
+    gen_dataset(lang="JavaScript", size="32")
     # gen_test()
     # langs = ["Java", "Python", "JavaScript", "PHP", "Ruby", "Go", "C#", "C++", "C", "Haskell", "Kotlin", "Fortran"]
     # for lang in langs:

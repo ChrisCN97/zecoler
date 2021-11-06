@@ -120,40 +120,35 @@ def gen_list(task_dicts, env, check_data=False):
 
 if __name__ == "__main__":
     task_dicts = []
-    for task in ["clone_detection"]:
-        for size, epoch, eval in [(700, 20, 100), (500, 20, 100), (300, 35, 100), (100, 100, 100)]:
-            task_dicts.append({"task_name": task, "lang": "Java", "size": size, "output": "Java_{}".format(size),
-                               "do_train": True, "freeze_plm": False, "epoch": epoch, "eval_step": eval, "do_test": False})
-            for t_lang in langs:
-                task_dicts.append({"task_name": task, "lang": t_lang, "size": 32, "output": "Java_{}".format(size),
-                                   "do_train": False, "freeze_plm": False, "epoch": 8, "eval_step": 8, "do_test": True})
-        for size, epoch, eval in [(100, 100, 100), (300, 35, 100), (500, 20, 100), (700, 20, 100), (1000, 20, 100),
-                                  (3000, 20, 100), (5000, 20, 200), (7000, 20, 200), (10000, 20, 200)]:
-            task_dicts.append({"task_name": task, "lang": "BCB", "size": size, "output": "BCB_{}".format(size),
-                               "do_train": True, "freeze_plm": False, "epoch": epoch, "eval_step": eval, "do_test": False})
-            task_dicts.append({"task_name": task, "lang": "BCB", "size": 32, "output": "BCB_{}".format(size),
+    # [(100,100,100),(300,35,100),(500,20,100),(700,20,100),(1000,20,100),(3000,20,100),
+    # (5000,20,200),(7000,20,200),(10000,20,200)]
+    # for task in ["clone_detection"]:
+    #     for size, epoch, eval in [(100,100,100),(300,35,100),(500,20,100),(700,20,100),(1000,20,100),
+    #                              (3000,20,100),(5000,20,200),(7000,20,200),(10000,20,200)]:
+    #         task_dicts.append({"task_name": task, "lang": "SC", "size": size, "output": "SC_{}".format(size),
+    #                            "do_train": True, "freeze_plm": False, "epoch": epoch, "eval_step": eval, "do_test": False})
+    #         task_dicts.append({"task_name": task, "lang": "SC", "size": 32, "output": "SC_{}".format(size),
+    #                            "do_train": False, "freeze_plm": False, "epoch": 8, "eval_step": 8, "do_test": True})
+
+    # for task in ["code_search"]:
+    #     s2
+    #     for size in [10000,7000,5000,3000,1000,700,500,300,100]:
+    #         task_dicts.append({"task_name": task, "lang": "SC", "size": 32, "output": "Java_{}".format(size),
+    #                            "do_train": False, "freeze_plm": False, "epoch": 8, "eval_step": 8, "do_test": True})
+    #     for size, epoch, eval in [(100,100,100),(300,35,100),(500,20,100),(700,20,100), (1000, 20, 100)]:
+    #         task_dicts.append({"task_name": task, "lang": "SC", "size": size, "output": "SC_{}".format(size),
+    #                            "do_train": True, "freeze_plm": False, "epoch": epoch, "eval_step": eval, "do_test": False})
+    #         task_dicts.append({"task_name": task, "lang": "SC", "size": 32, "output": "SC_{}".format(size),
+    #                            "do_train": False, "freeze_plm": False, "epoch": 8, "eval_step": 8, "do_test": True})
+    for task in ["name_predict"]:
+        for size, epoch, eval in [(100,100,100),(300,35,100),(500,20,100),(700,20,100),(1000,20,100)]:
+            # task_dicts.append({"task_name": task, "lang": "SC", "size": size, "output": "SC_{}".format(size),
+            #                    "do_train": True, "freeze_plm": False, "epoch": epoch, "eval_step": eval,
+            #                    "do_test": False})
+            task_dicts.append({"task_name": task, "lang": "SC", "size": 32, "output": "SC_{}".format(size),
                                "do_train": False, "freeze_plm": False, "epoch": 8, "eval_step": 8, "do_test": True})
-    for task in ["defect_detection"]:
-        for size, epoch, eval in [(100,100,100),(300,35,100),(500,20,100),(700,20,100), (1000, 20, 100),
-                                  (3000, 20, 100), (5000, 20, 200), (7000, 20, 200), (10000, 20, 200)]:
-            task_dicts.append({"task_name": task, "lang": "Java", "size": size, "output": "Java_{}".format(size),
-                               "do_train": True, "freeze_plm": False, "epoch": epoch, "eval_step": eval, "do_test": False})
-            task_dicts.append({"task_name": task, "lang": "Java", "size": 32, "output": "Java_{}".format(size),
-                               "do_train": False, "freeze_plm": False, "epoch": 8, "eval_step": 8, "do_test": True})
-            task_dicts.append({"task_name": task, "lang": "Devign", "size": size, "output": "Devign_{}".format(size),
-                               "do_train": True, "freeze_plm": False, "epoch": epoch, "eval_step": eval,
-                               "do_test": False})
-            task_dicts.append({"task_name": task, "lang": "Devign", "size": 32, "output": "Devign_{}".format(size),
-                               "do_train": False, "freeze_plm": False, "epoch": 8, "eval_step": 8, "do_test": True})
-    for task in ["code_search"]:
-        for size, epoch, eval  in [(100,100,100),(300,35,100),(500,20,100),(700,20,100), (1000, 20, 100),
-                                  (3000, 20, 100), (5000, 20, 200), (7000, 20, 200), (10000, 20, 200)]:
-            task_dicts.append({"task_name": task, "lang": "Java", "size": size, "output": "Java_{}".format(size),
-                               "do_train": True, "freeze_plm": False, "epoch": epoch, "eval_step": eval, "do_test": False})
-            for t_lang in langs:
-                task_dicts.append(
-                    {"task_name": task, "lang": t_lang, "size": 32, "output": "Java_{}".format(size),
-                     "do_train": False, "freeze_plm": False, "epoch": 8, "eval_step": 8, "do_test": True})
-    gen_list(task_dicts, S2, check_data=False)
-    # S2 19294 output/clone_detection/finetune/log/task_list.log 10.1 10:00
+            # task_dicts.append({"task_name": task, "lang": "SC", "size": 32, "output": "Java_{}".format(size),
+            #                "do_train": False, "freeze_plm": False, "epoch": 8, "eval_step": 8, "do_test": True})
+    gen_list(task_dicts, S1, check_data=False)
+    # S1 29551 output/name_predict/finetune/log/task_list.log 11.4 10:40
 
