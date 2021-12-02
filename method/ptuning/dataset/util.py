@@ -90,8 +90,10 @@ if __name__ == "__main__":
     SOURCE_PATH = os.path.join(SOURCE_PATH, TARGET_PATH)
 
     # gen_test()
-    for size in [7000,5000,3000,1000,700,500,300,100,32]:
-        gen_dataset(lang="SC", size=str(size))
+    for task in ["clone_detection", "code_search"]:
+        TARGET_PATH = task
+        for size in [300,100,32]:
+            gen_dataset(lang="Go", size=str(size))
     # for lang in ["Python", "JavaScript", "Go"]:
     #     gen_dataset(lang=lang, size="32")
     # gen_dataset(lang="JavaScript", size="32")

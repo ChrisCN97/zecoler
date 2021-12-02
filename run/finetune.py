@@ -3,7 +3,19 @@ from server import S1, S2, S3
 import os
 
 langs = ["Java", "Python", "JavaScript", "PHP", "Ruby", "Go", "C#", "C++", "C", "Haskell", "Kotlin", "Fortran"]
-
+train_config = {
+    32: [2, 4],
+    "test": [2, 4],
+    100: [100,100],
+    300: [35,100],
+    500: [20,100],
+    700: [20,100],
+    1000: [20,100],
+    3000: [20,100],
+    5000: [20,200],
+    7000: [20,200],
+    10000: [20,200]
+}
 def finetune(
         model_type="roberta",
         config_name="microsoft/codebert-base",
@@ -86,15 +98,17 @@ def gen_list(task_dicts, env, check_data=False):
     cmd = ""
     pre_time = 0
     for task in task_dicts:
+        task["epoch"] = train_config[task["size"]][0]
+        task["eval_step"] = train_config[task["size"]][1]
         c = finetune(
+            model_name_or_path=task["model"],
             task_name=task["task_name"],
             lang=task["lang"],
             size=task["size"],
             output=task["output"],
-            do_train=task["do_train"],
-            freeze_plm=task["freeze_plm"],
             epoch=task["epoch"],
             eval_step=task["eval_step"],
+            do_train=task["do_train"],
             do_test=task["do_test"],
             env=env,
             is_part=True)
@@ -119,36 +133,35 @@ def gen_list(task_dicts, env, check_data=False):
     print("%dh %02dmin" % (h, m))
 
 if __name__ == "__main__":
+    # need test source domain
     task_dicts = []
-    # [(100,100,100),(300,35,100),(500,20,100),(700,20,100),(1000,20,100),(3000,20,100),
-    # (5000,20,200),(7000,20,200),(10000,20,200)]
-    # for task in ["clone_detection"]:
-    #     for size, epoch, eval in [(100,100,100),(300,35,100),(500,20,100),(700,20,100),(1000,20,100),
-    #                              (3000,20,100),(5000,20,200),(7000,20,200),(10000,20,200)]:
-    #         task_dicts.append({"task_name": task, "lang": "SC", "size": size, "output": "SC_{}".format(size),
-    #                            "do_train": True, "freeze_plm": False, "epoch": epoch, "eval_step": eval, "do_test": False})
-    #         task_dicts.append({"task_name": task, "lang": "SC", "size": 32, "output": "SC_{}".format(size),
-    #                            "do_train": False, "freeze_plm": False, "epoch": 8, "eval_step": 8, "do_test": True})
-
-    # for task in ["code_search"]:
-    #     s2
-    #     for size in [10000,7000,5000,3000,1000,700,500,300,100]:
-    #         task_dicts.append({"task_name": task, "lang": "SC", "size": 32, "output": "Java_{}".format(size),
-    #                            "do_train": False, "freeze_plm": False, "epoch": 8, "eval_step": 8, "do_test": True})
-    #     for size, epoch, eval in [(100,100,100),(300,35,100),(500,20,100),(700,20,100), (1000, 20, 100)]:
-    #         task_dicts.append({"task_name": task, "lang": "SC", "size": size, "output": "SC_{}".format(size),
-    #                            "do_train": True, "freeze_plm": False, "epoch": epoch, "eval_step": eval, "do_test": False})
-    #         task_dicts.append({"task_name": task, "lang": "SC", "size": 32, "output": "SC_{}".format(size),
-    #                            "do_train": False, "freeze_plm": False, "epoch": 8, "eval_step": 8, "do_test": True})
-    for task in ["name_predict"]:
-        for size, epoch, eval in [(100,100,100),(300,35,100),(500,20,100),(700,20,100),(1000,20,100)]:
-            # task_dicts.append({"task_name": task, "lang": "SC", "size": size, "output": "SC_{}".format(size),
-            #                    "do_train": True, "freeze_plm": False, "epoch": epoch, "eval_step": eval,
-            #                    "do_test": False})
-            task_dicts.append({"task_name": task, "lang": "SC", "size": 32, "output": "SC_{}".format(size),
-                               "do_train": False, "freeze_plm": False, "epoch": 8, "eval_step": 8, "do_test": True})
-            # task_dicts.append({"task_name": task, "lang": "SC", "size": 32, "output": "Java_{}".format(size),
-            #                "do_train": False, "freeze_plm": False, "epoch": 8, "eval_step": 8, "do_test": True})
-    gen_list(task_dicts, S1, check_data=False)
-    # S1 29551 output/name_predict/finetune/log/task_list.log 11.4 10:40
+    model_list = ["microsoft/codebert-base", "roberta-base"]
+    # for task in ["clone_detection", "code_search", "name_predict"]:
+    #     task_dicts.append({"task_name": task, "lang": "Go", "size": 300, "model": model_list[0],
+    #                        "output": "Go_300", "do_train": True, "do_test": False})
+    #     task_dicts.append({"task_name": task, "lang": "Go", "size": 32, "model": model_list[0],
+    #                        "output": "Go_300", "do_train": False, "do_test": True})
+    #
+    # for task in ["name_predict"]:
+    #     task_dicts.append({"task_name": task, "lang": "Java", "size": 5000, "model": model_list[0],
+    #                        "output": "Java_5000", "do_train": True, "do_test": False})
+    #     for lang in ["Java", "SC", "Go"]:
+    #         task_dicts.append({"task_name": task, "lang": lang, "size": 32, "model": model_list[0],
+    #                            "output": "Java_5000", "do_train": False, "do_test": True})
+    #
+    # for task in ["clone_detection", "code_search", "name_predict"]:
+    #     for lang in ["Java", "SC", "Go"]:
+    #         task_dicts.append({"task_name": task, "lang": lang, "size": 300, "model": model_list[1],
+    #                            "output": "{}_300_r".format(lang), "do_train": True, "do_test": False})
+    #         task_dicts.append({"task_name": task, "lang": lang, "size": 32, "model": model_list[1],
+    #                            "output": "{}_300_r".format(lang), "do_train": False, "do_test": True})
+    #     task_dicts.append({"task_name": task, "lang": "Java", "size": 5000, "model": model_list[1],
+    #                        "output": "Java_5000_r", "do_train": True, "do_test": False})
+    #     for lang in ["Java", "SC", "Go"]:
+    #         task_dicts.append({"task_name": task, "lang": lang, "size": 32, "model": model_list[1],
+    #                            "output": "Java_5000_r", "do_train": False, "do_test": True})
+    task_dicts.append({"task_name": "clone_detection", "lang": "Java", "size": 5000, "model": model_list[1],
+                       "output": "Java_5000_r", "do_train": True, "do_test": False})
+    gen_list(task_dicts, S2, check_data=True)
+    # s2 28348 output/clone_detection/finetune/log/task_list.log
 

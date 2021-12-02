@@ -282,10 +282,10 @@ def process_CSN():
 if __name__ == "__main__":
     # get_qualified_prob_list()
     # lang = "Java"
-    # for size in [32,100,300,500,700,1000,3000,5000,7000,10000]:
-    #     gen_train(lang="SC", size=size)
+    for size in [32,100,300]:
+        gen_train(lang="Go", size=size)
     # langs = ["Java", "Python", "JavaScript", "PHP", "Ruby", "Go", "C#", "C++", "C", "Haskell", "Kotlin", "Fortran"]
     # for lang in langs:
     #     gen_train(lang, size=32)
     # check_trainrepeat_pnrate(lang="SC", name="train.txt")
-    check_example(lang="SC", name="train.txt")
+    # check_example(lang="SC", name="train.txt")

@@ -84,6 +84,10 @@ if __name__ == "__main__":
     # get_output(method="finetune", task="clone_detection", name="Java_10000_b", from_server=S2)
     # get_dataset(method="ptuning", task="clone_detection", lang="Java", size="7000", from_server=S2)
     # plot_loss(folder="output/clone_detection/ptuning/Java_700_p_f/p1-i0", name="acc.npy")
-    # plot_loss(folder="output/clone_detection/finetune/Java_100", name="acc.npy")
-    for size in [1000,700,500,300,100]:
-        log_format("name_predict", "ptuning", "Java_{}".format(size), langs=["SC"])
+    plot_loss(folder="output/clone_detection/finetune/Java_5000_r", name="acc.npy")
+    task_list = ["clone_detection", "code_search", "name_predict"]
+    # for size in [100, 300]:
+    # for task in task_list:
+    # for lang in ["Java", "SC", "Go"]:
+    #     log_format(task_list[0], "finetune", "_300_r".format(lang), langs=[lang])
+    # log_format(task_list[0], "finetune", "Java_5000_r", langs=["Java", "SC", "Go"])
