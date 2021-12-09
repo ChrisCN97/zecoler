@@ -23,7 +23,7 @@ class RobertaClassificationHead(nn.Module):
         self.out_proj = nn.Linear(l2n, 2)
 
     def forward(self, features, **kwargs):
-        x = features[:, 0, :]  # take <s> token (equiv. to [CLS])
+        x = torch.mean(features, dim=1)  # take <s> token (equiv. to [CLS])
         x = x.reshape(-1,x.size(-1)*2)  # 分开
         x = self.dropout(x)
         x = self.dense(x)
@@ -47,8 +47,9 @@ class Model(nn.Module):
     
         
     def forward(self, input_ids=None,labels=None):
+        input_ids = input_ids.view(-1, self.args.block_size)
         embedding = self.encoder.get_input_embeddings()
-        outputs = embedding(input_ids).view(-1,self.args.block_size)
+        outputs = embedding(input_ids)
         logits=self.classifier(outputs)
         prob=F.softmax(logits)
         if labels is not None:

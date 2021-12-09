@@ -137,7 +137,7 @@ if __name__ == "__main__":
     # need test source domain
     task_dicts = []
     model_list = ["microsoft/codebert-base", "roberta-base", "roberta-large"]
-    model = model_list[2]
+    model = model_list[0]
     # task_dicts.append({"task_name": "clone_detection", "lang": "Java", "size": "test", "model": model,
     #                    "output": "test", "do_train": True, "do_test": False})
     for task in ["clone_detection", "code_search", "name_predict"]:
@@ -152,5 +152,5 @@ if __name__ == "__main__":
             task_dicts.append({"task_name": task, "lang": lang, "size": 32, "model": model,
                                "output": "Java_5000_rl", "do_train": False, "do_test": True})
     gen_list(task_dicts, S2, check_data=False)
-    # s3
+    # s2 20589 output/clone_detection/finetune/log/task_list.log
 
