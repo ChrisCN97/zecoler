@@ -105,23 +105,23 @@ class InputFeatures(object):
         
 def convert_examples_to_features(code1_tokens,code2_tokens,label,url1,url2,tokenizer,args,cache,code1s,code2s):
     #source
-    code1_tokens=code1_tokens[:args.block_size-2]
-    code1_tokens =[tokenizer.cls_token]+code1_tokens+[tokenizer.sep_token]
-    code2_tokens=code2_tokens[:args.block_size-2]  # 分开
-    code2_tokens =[tokenizer.cls_token]+code2_tokens+[tokenizer.sep_token]  # 分开
+    code1_tokens = code1_tokens[:args.block_size - 2]
+    code1_tokens = [tokenizer.cls_token] + code1_tokens + [tokenizer.sep_token]
+    code2_tokens = code2_tokens[:args.block_size - 2]  # 分开
+    code2_tokens = [tokenizer.cls_token] + code2_tokens + [tokenizer.sep_token]  # 分开
     # code2_tokens = code2_tokens[:args.block_size - 1]  # 合并
     # code2_tokens = code2_tokens + [tokenizer.sep_token]  # 合并
-    
-    code1_ids=tokenizer.convert_tokens_to_ids(code1_tokens)
+
+    code1_ids = tokenizer.convert_tokens_to_ids(code1_tokens)
     padding_length = args.block_size - len(code1_ids)
-    code1_ids+=[tokenizer.pad_token_id]*padding_length
-    
-    code2_ids=tokenizer.convert_tokens_to_ids(code2_tokens)
+    code1_ids += [tokenizer.pad_token_id] * padding_length
+
+    code2_ids = tokenizer.convert_tokens_to_ids(code2_tokens)
     padding_length = args.block_size - len(code2_ids)
-    code2_ids+=[tokenizer.pad_token_id]*padding_length
-    
-    source_tokens=code1_tokens+code2_tokens
-    source_ids=code1_ids+code2_ids
+    code2_ids += [tokenizer.pad_token_id] * padding_length
+
+    source_tokens = code1_tokens + code2_tokens
+    source_ids = code1_ids + code2_ids
     code=code1s+"\n"+code2s
     return InputFeatures(source_tokens,source_ids,label,url1,url2,code)
 

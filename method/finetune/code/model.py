@@ -46,9 +46,9 @@ class Model(nn.Module):
         self.args=args
     
         
-    def forward(self, input_ids=None,labels=None): 
-        input_ids=input_ids.view(-1,self.args.block_size)  # 分开
-        outputs = self.encoder(input_ids=input_ids, attention_mask=input_ids.ne(1))[0]
+    def forward(self, input_ids=None,labels=None):
+        embedding = self.encoder.get_input_embeddings()
+        outputs = embedding(input_ids).view(-1,self.args.block_size)
         logits=self.classifier(outputs)
         prob=F.softmax(logits)
         if labels is not None:
