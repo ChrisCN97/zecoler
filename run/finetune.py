@@ -27,9 +27,8 @@ def finetune(
         output="Java_32",
         do_train=True,
         freeze_plm=False,
-        train_batch=10,
+        train_batch=6,
         epoch=20,
-        train_batch_size=10,
         eval_step=100,
         learning_rate=1e-5,
         do_test=True,
@@ -69,7 +68,6 @@ def finetune(
         cmd += "--freeze_plm "
     cmd += "--train_batch_size {} ".format(train_batch)
     cmd += "--epoch {} ".format(epoch)
-    cmd += "--train_batch_size {} ".format(train_batch_size)
     cmd += "--learning_rate {} ".format(learning_rate)
     if do_train:
         cmd += "--do_train "
@@ -151,6 +149,6 @@ if __name__ == "__main__":
         for lang in ["Java", "SC", "Go"]:
             task_dicts.append({"task_name": task, "lang": lang, "size": 32, "model": model,
                                "output": "Java_5000_rl", "do_train": False, "do_test": True})
-    gen_list(task_dicts, S2, check_data=False)
-    # s3
+    gen_list(task_dicts, S1, check_data=False)
+    # s1 19792 output/clone_detection/finetune/log/task_list.log
 

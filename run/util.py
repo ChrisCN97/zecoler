@@ -87,7 +87,8 @@ if __name__ == "__main__":
     # plot_loss(folder="output/code_search/finetune/Java_5000_r", name="acc.npy")
     task_list = ["clone_detection", "code_search", "name_predict"]
     # for size in [100, 300]:
-    # for task in task_list:
-    # for lang in ["Java", "SC", "Go"]:
-    #     log_format(task_list[2], "finetune", "{}_300_r".format(lang), langs=[lang])
-    log_format(task_list[2], "finetune", "Java_5000_r", langs=["SC", "Go"])
+    for task in task_list:
+        log_format(task, "finetune", "Java_300_rl", langs=["Java"])
+        log_format(task, "finetune", "Java_5000_rl", langs=["Java", "SC", "Go"])
+        log_format(task, "finetune", "SC_300_rl", langs=["SC"])
+        log_format(task, "finetune", "Go_300_rl", langs=["Go"])
