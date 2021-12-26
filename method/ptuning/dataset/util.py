@@ -94,4 +94,4 @@ if __name__ == "__main__":
     #     TARGET_PATH = task
     #     for size in [500]:
     #         gen_dataset(lang="Go", size=str(size))
-    gen_dataset(lang="Go", size=str(500))
+    gen_dataset(lang="Go", size=str(5000))

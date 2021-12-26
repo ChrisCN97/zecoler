@@ -90,5 +90,5 @@ if __name__ == "__main__":
     # plot_loss(folder="output/clone_detection/finetune/Java_5000_rl", name="acc.npy")
     model_list = ["microsoft/codebert-base", "roberta-base", "huggingface/CodeBERTa-small-v1", "roberta-large"]
     task_list = ["clone_detection", "code_search", "name_predict"]
-    for task in task_list:
-        log_format(task, "finetune", "SC_32_c", langs=["SC"])
+    langs.append("SC")
+    log_format(task_list[0], "ptuning", "Go_5000", langs=langs)

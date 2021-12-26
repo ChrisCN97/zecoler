@@ -2,6 +2,7 @@ import os.path
 
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+import numpy as np
 from matplotlib.ticker import MaxNLocator
 
 mpl.rcParams['font.family'] = 'Arial'
@@ -30,11 +31,14 @@ def zero_shot_plot(data_set, filename, xlabel, ylabel='Accuracy', legend_list=No
 
     plt.show()
     fig.tight_layout()
+    save_fig(fig, filename)
+
+def save_fig(fig, filename):
+    plt.show()
     file = os.path.join(file_path, filename)
     if not os.path.exists(file_path):
         os.mkdir(file_path)
     fig.savefig(file, dpi=200)
-
 
 def plot_fig3():
     x = [1,
@@ -47,14 +51,14 @@ def plot_fig3():
     y = [83.5,
          87.8,
          88.9,
-         79.2,
+         85.2,
          87.7]
 
     for i in range(len(y)):
         y[i] /= 100
 
     xlabel = '# Number of Prompts'
-    file = 'zero_shot_fig2.png'
+    file = 'fig3.png'
 
     zero_shot_plot(data_set=[(x, y)], filename=file, xlabel=xlabel)
 
@@ -75,7 +79,7 @@ def plot_fig4():
         y[i] /= 100
 
     xlabel = '# Position of Prompts'
-    file = 'zero_shot_fig3.png'
+    file = 'fig4.png'
 
     zero_shot_plot(data_set=[(x, y)], filename=file, xlabel=xlabel)
 
@@ -88,31 +92,125 @@ def plot_tab3_single(x, y_list, legend_list, filename):
     xlabel = 'Data Size'
     zero_shot_plot(data_set=data_set, filename=filename, xlabel=xlabel, legend_list=legend_list)
 
-def plot_tab3():
+def plot_tab3_CD():
     x = [32, 100, 300, 500, 700]
     legend_list = ["Zecoler", "CodeBERT", "CodeBERTa"]
     # zecoler, CodeBERT, CodeBERTa
-    CD_Java_list = [
+    Java_list = [
         [53.3, 63.6, 85.8, 90.8, 95.1],
         [48.2, 55.4, 51.3, 48.8, 48.1],
         [52.8, 51, 53.9, 50.7, 51.6]
     ]
-    CD_SC_list = [
+    SC_list = [
         [90.1, 93.9, 94.3, 93.6, 94.4],
         [65.4, 68.7, 69.4, 70.2, 75.3],
-        [50, 64.5, 65.0, 68.3, 73.7]
+        [65.1, 64.5, 65.0, 68.3, 73.7]
     ]
-    CD_Go_list = [
+    Go_list = [
         [52.8, 99.5, 99.3, 99.1, 99.4],
-        [57.9, 50.3, 49.5, 71.2, 100],
+        [57.9, 50.3, 49.5, 71.2, 68.4],
         [57.9, 53.1, 52, 65.3, 65.9]
     ]
 
-    plot_tab3_single(x, CD_Java_list, legend_list, filename="cd_java_fs.png")
-    plot_tab3_single(x, CD_SC_list, legend_list, filename="cd_sc_fs.png")
-    plot_tab3_single(x, CD_Go_list, legend_list, filename="cd_go_fs.png")
+    plot_tab3_single(x, Java_list, legend_list, filename="cd_java_fs.png")
+    plot_tab3_single(x, SC_list, legend_list, filename="cd_sc_fs.png")
+    plot_tab3_single(x, Go_list, legend_list, filename="cd_go_fs.png")
+
+def plot_tab3_CS():
+    x = [32, 100, 300, 500, 700]
+    legend_list = ["Zecoler", "CodeBERT", "CodeBERTa"]
+    # zecoler, CodeBERT, CodeBERTa
+    Java_list = [
+        [51.7, 52.6, 51.7, 57.5, 61.9],
+        [51.7, 53.6, 50.8, 51.7, 50.3],
+        [55.1, 50.4, 52.8, 52, 50.4]
+    ]
+    SC_list = [
+        [53.2, 63, 90.1, 91.7, 92.1],
+        [52.4, 52.6, 56.5, 53.2, 52.2],
+        [53, 54.9, 54.3, 58.8, 55.8]
+    ]
+    Go_list = [
+        [52, 95.7, 99.5, 99.3, 99.4],
+        [53.2, 47.9, 49.5, 44.8, 68.4],
+        [50.9, 48.9, 53.9, 45, 45.8]
+    ]
+
+    plot_tab3_single(x, Java_list, legend_list, filename="cs_java_fs.png")
+    plot_tab3_single(x, SC_list, legend_list, filename="cs_sc_fs.png")
+    plot_tab3_single(x, Go_list, legend_list, filename="cs_go_fs.png")
+
+def plot_tab3_MNP():
+    x = [32, 100, 300, 500, 700]
+    legend_list = ["Zecoler", "CodeBERT", "CodeBERTa"]
+    # zecoler, CodeBERT, CodeBERTa
+    Java_list = [
+        [66.9, 72.8, 98.7, 99.8, 99.8],
+        [52.5, 50.2, 49.3, 50.3, 50.4],
+        [49.4, 52, 52.9, 50.8, 50.2]
+    ]
+    SC_list = [
+        [52.7, 62.8, 88.8, 90.3, 93.1],
+        [52.1, 49.6, 53.9, 53.7, 51.7],
+        [50.2, 52.2, 53.9, 61.8, 64.6]
+    ]
+    Go_list = [
+        [52.2, 77.7, 99.2, 99.3, 99.4],
+        [49.7, 49.5, 49.5, 47.6, 68.4],
+        [49.2, 48.7, 50.9, 47.4, 48.6]
+    ]
+
+    plot_tab3_single(x, Java_list, legend_list, filename="mnp_java_fs.png")
+    plot_tab3_single(x, SC_list, legend_list, filename="mnp_sc_fs.png")
+    plot_tab3_single(x, Go_list, legend_list, filename="mnp_go_fs.png")
+
+def plot_fig5():
+    # plt.style.use('ggplot')
+
+    labels = ["Java", "Python", "Go", "SC", "Haskell", "Kotlin", "PHP", "C#", "Fortran"]
+    x = np.arange(len(labels))  # the label locations
+    margin = 0.1
+
+    y_labels = ["Java", "Go", "Python"]
+    width = (1. - 2. * margin) / len(y_labels)  # the width of the bars
+    y_res = [
+        [98.8, 91.6, 96.4, 79.8, 91.2, 96.8, 96.3, 96.6, 92.7],
+        [95.5, 91.8, 99.5, 69.9, 90.6, 94.4, 95.5, 94.3, 91.2],
+        [94.1, 98.5, 94.1, 53.6, 83.4, 96.4, 93.6, 91.9, 81.5]
+    ]
+    for y in y_res:
+        for i in range(len(y)):
+            y[i] /= 100
+
+    fig, ax = plt.subplots(figsize=(10, 5))
+    # plt.setp(ax.xaxis.get_majorticklabels(), rotation=90)
+    plt.grid(zorder=0)
+    for idx, y in enumerate(y_res):
+        ax.bar(x + idx*width, y, width, label=y_labels[idx], zorder=50)
+
+    fontsize = 15
+    ax.set_ylim([0.4, 1.05])
+    ax.set_yticks(np.arange(0.4, 1.2, step=0.2))
+    ax.set_xlabel('Program Languages', fontsize=fontsize)
+    ax.set_ylabel('Accuracy', fontsize=fontsize)
+    ax.set_xticks(x+width)
+    ax.set_xticklabels(labels)
+    plt.xticks(fontsize=fontsize)
+    plt.yticks(fontsize=fontsize)
+    ax.spines['bottom'].set(zorder=200)
+
+    plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc='lower left',
+               ncol=3, mode="expand", borderaxespad=0., fontsize=fontsize)
+
+
+    fig.tight_layout()
+
+    save_fig(fig, filename="fig5.png")
 
 if __name__ == '__main__':
+    # plot_tab3_CD()
+    # plot_tab3_CS()
+    # plot_tab3_MNP()
     # plot_fig3()
     # plot_fig4()
-    plot_tab3()
+    plot_fig5()

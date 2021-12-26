@@ -2,7 +2,7 @@ from util import get_dataset
 from server import S1, S2, S3
 import os
 
-langs = ["Java", "Python", "JavaScript", "PHP", "Ruby", "Go", "C#", "C++", "C", "Haskell", "Kotlin", "Fortran"]
+langs = ["Java", "Python", "JavaScript", "PHP", "Ruby", "Go", "C#", "C++", "C", "Haskell", "Kotlin", "Fortran", "SC"]
 train_config = {
     32: [1000, 100],
     "test": [8, 4],
@@ -159,18 +159,12 @@ if __name__ == "__main__":
     model_list = ["microsoft/codebert-base", "roberta-base"]
     task_dicts = []
     task_list = ["clone_detection", "code_search", "name_predict"]
-    for pattern_ids in [1, 5, 10, 15, 20]:
+    task_dicts.append(
+        {"task_name": task_list[0], "lang": "Go", "size": 5000, "model": model_list[0],
+         "output": "Go_5000", "do_train": True, "zeroshot": False})
+    for lang in langs:
         task_dicts.append(
-            {"task_name": task_list[0], "lang": "Java", "size": 700, "model": model_list[0],
-             "output": "Java_700_p{}".format(pattern_ids), "do_train": True, "zeroshot": False,
-             "pattern_ids": pattern_ids})
-        task_dicts.append(
-            {"task_name": task_list[0], "lang": "SC", "size": 32, "model": model_list[0],
-             "output": "Java_700_p{}".format(pattern_ids), "do_train": False, "zeroshot": True,
-             "pattern_ids": pattern_ids})
-    for p in ["l", "m", "r"]:
-        task_dicts.append(
-            {"task_name": task_list[0], "lang": "SC", "size": 32, "model": model_list[0],
-             "output": "Java_700_p{}".format(p), "do_train": False, "zeroshot": True})
+            {"task_name": task_list[0], "lang": lang, "size": 32, "model": model_list[0],
+             "output": "Go_5000", "do_train": False, "zeroshot": True})
     gen_list(task_dicts, S1, check_data=False)
-    # s1 19394 output/clone_detection/ptuning/log/task_list.log
+    # s1 17740 output/clone_detection/ptuning/log/task_list.log 9:50
