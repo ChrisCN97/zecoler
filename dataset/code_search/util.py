@@ -282,7 +282,7 @@ def process_CSN():
 if __name__ == "__main__":
     # get_qualified_prob_list()
     # lang = "Java"
-    for size in [32,100,300]:
+    for size in [5000]:
         gen_train(lang="Go", size=size)
     # langs = ["Java", "Python", "JavaScript", "PHP", "Ruby", "Go", "C#", "C++", "C", "Haskell", "Kotlin", "Fortran"]
     # for lang in langs:

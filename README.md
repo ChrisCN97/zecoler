@@ -1,3 +1,3 @@
 # zeroshot
 ## structure
-![structure](pics/structure.png)
+![structure](draw/pics/structure.png)

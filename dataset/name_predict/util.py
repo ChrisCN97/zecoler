@@ -148,6 +148,6 @@ if __name__ == "__main__":
     # check_example(lang="Java", name="train.txt")
     # for lang, folder in [("python", "Python"), ("go", "Go"), ("javascript", "JavaScript")]:
     #     gen_dataset(lang, folder, min_code_len=800, max_code_len=1000)
-    for size in [32,100,300]:
+    for size in [5000]:
         gen_train(lang="Go", size=size)
     # gen_dataset(lang="javascript", folder="JavaScript", min_code_len=700, max_code_len=900)

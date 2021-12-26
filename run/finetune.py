@@ -4,15 +4,17 @@ import os
 
 langs = ["Java", "Python", "JavaScript", "PHP", "Ruby", "Go", "C#", "C++", "C", "Haskell", "Kotlin", "Fortran"]
 train_config = {
-    32: [2, 4],
+    32: [100,100],
     "test": [2, 4],
     100: [100,100],
     300: [35,100],
+    # 300: [58,100],
     500: [20,100],
     700: [20,100],
     1000: [20,100],
     3000: [20,100],
     5000: [20,200],
+    # 5000: [33,200],
     7000: [20,200],
     10000: [20,200]
 }
@@ -134,21 +136,13 @@ def gen_list(task_dicts, env, check_data=False):
 if __name__ == "__main__":
     # need test source domain
     task_dicts = []
-    model_list = ["microsoft/codebert-base", "roberta-base", "roberta-large"]
-    model = model_list[2]
-    # task_dicts.append({"task_name": "clone_detection", "lang": "Java", "size": "test", "model": model,
-    #                    "output": "test", "do_train": True, "do_test": False})
-    for task in ["clone_detection", "code_search", "name_predict"]:
-        for lang in ["Java", "SC", "Go"]:
-            task_dicts.append({"task_name": task, "lang": lang, "size": 300, "model": model,
-                               "output": "{}_300_rl".format(lang), "do_train": True, "do_test": False})
-            task_dicts.append({"task_name": task, "lang": lang, "size": 32, "model": model,
-                               "output": "{}_300_rl".format(lang), "do_train": False, "do_test": True})
-        task_dicts.append({"task_name": task, "lang": "Java", "size": 5000, "model": model,
-                           "output": "Java_5000_rl", "do_train": True, "do_test": False})
-        for lang in ["Java", "SC", "Go"]:
-            task_dicts.append({"task_name": task, "lang": lang, "size": 32, "model": model,
-                               "output": "Java_5000_rl", "do_train": False, "do_test": True})
+    model_list = ["microsoft/codebert-base", "roberta-base", "huggingface/CodeBERTa-small-v1", "roberta-large"]
+    task_list = ["clone_detection", "code_search", "name_predict"]
+    for task in task_list:
+        task_dicts.append({"task_name": task, "lang": "Go", "size": 700, "model": model_list[0],
+                           "output": "Go_700", "do_train": True, "do_test": False})
+        task_dicts.append({"task_name": task, "lang": "Go", "size": 700, "model": model_list[0],
+                           "output": "Go_700", "do_train": False, "do_test": True})
     gen_list(task_dicts, S1, check_data=False)
-    # s1 19792 output/clone_detection/finetune/log/task_list.log
+    # s1 15672 output/clone_detection/finetune/log/task_list.log 11:30
 

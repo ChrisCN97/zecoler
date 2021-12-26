@@ -81,18 +81,12 @@ def get_data_list(level=-1, lang=""):
 
 
 if __name__ == '__main__':
-    TARGET_PATH = "name_predict"
+    task_list = ["clone_detection", "code_search", "name_predict"]
+    TARGET_PATH = task_list[0]
     SOURCE_PATH = os.path.join(SOURCE_PATH, TARGET_PATH)
 
-    for task in ["clone_detection", "code_search"]:
-        TARGET_PATH = task
-        for size in [300, 100, 32]:
-            gen_dataset(lang="Go", size=str(size))
-    # for lang in ["Python", "JavaScript", "Go"]:
-    #     gen_dataset(lang=lang, size="32")
-    # gen_dataset(lang="JavaScript", size="32")
-    # gen_test()
-    # langs = ["Java", "Python", "JavaScript", "PHP", "Ruby", "Go", "C#", "C++", "C", "Haskell", "Kotlin", "Fortran"]
-    # for lang in langs:
-    #     gen_dataset(lang=lang, size="32")
-    # get_data_list(level=-1, lang="")
+    # for task in task_list:
+    #     TARGET_PATH = task
+    #     for size in [5000]:
+    #         gen_dataset(lang="Go", size=str(size))
+    gen_dataset(lang="Go", size=str(500))

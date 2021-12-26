@@ -70,7 +70,10 @@ def log_checker(task, method, output_name):
 def log_format(task, method, output_name, langs):
     log_dict = log_checker(task, method, output_name)
     for l in langs:
-        print(log_dict[l])
+        try:
+            print(log_dict[l])
+        except KeyError:
+            print(task, method, output_name, l);
     # if method == "ptuning":
     #     ptuning_time_reader(task, output_name)
 
@@ -84,11 +87,8 @@ if __name__ == "__main__":
     # get_output(method="finetune", task="clone_detection", name="Java_10000_b", from_server=S2)
     # get_dataset(method="ptuning", task="clone_detection", lang="Java", size="7000", from_server=S2)
     # plot_loss(folder="output/clone_detection/ptuning/Java_700_p_f/p1-i0", name="acc.npy")
-    # plot_loss(folder="output/code_search/finetune/Java_5000_r", name="acc.npy")
+    # plot_loss(folder="output/clone_detection/finetune/Java_5000_rl", name="acc.npy")
+    model_list = ["microsoft/codebert-base", "roberta-base", "huggingface/CodeBERTa-small-v1", "roberta-large"]
     task_list = ["clone_detection", "code_search", "name_predict"]
-    # for size in [100, 300]:
     for task in task_list:
-        log_format(task, "finetune", "Java_300_rl", langs=["Java"])
-        log_format(task, "finetune", "Java_5000_rl", langs=["Java", "SC", "Go"])
-        log_format(task, "finetune", "SC_300_rl", langs=["SC"])
-        log_format(task, "finetune", "Go_300_rl", langs=["Go"])
+        log_format(task, "finetune", "SC_32_c", langs=["SC"])
