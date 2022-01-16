@@ -2,5 +2,8 @@
 **/.DS_Store
 **/dataset/*/*
 !**/dataset/*/util.py
+!dataset/clone_detection/Java
+!method/finetune/dataset/clone_detection/Java/500
+!method/ptuning/dataset/clone_detection/Java/500
 *.log
 server.py
