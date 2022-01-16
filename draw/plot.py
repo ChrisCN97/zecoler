@@ -26,7 +26,8 @@ def zero_shot_plot(data_set, filename, xlabel, ylabel='Accuracy', legend_list=No
     if legend_list is not None:
         plt.legend()
     plt.grid()
-    plt.xlabel(xlabel, fontsize=24)
+    if xlabel is not None:
+        plt.xlabel(xlabel, fontsize=24)
     plt.ylabel(ylabel, fontsize=24)
 
     plt.show()
@@ -60,14 +61,14 @@ def plot_fig3():
     xlabel = '# Number of Prompts'
     file = 'fig3.png'
 
-    zero_shot_plot(data_set=[(x, y)], filename=file, xlabel=xlabel)
+    zero_shot_plot(data_set=[(x, y)], filename=file, xlabel=None)
 
 
 def plot_fig4():
-    x = ['more lefts',
-         'less middles',
-         'average',
-         'more rights'
+    x = ['head',
+         'middle',
+         'evenly',
+         'tail'
          ]
 
     y = [81.4,
@@ -81,7 +82,7 @@ def plot_fig4():
     xlabel = '# Position of Prompts'
     file = 'fig4.png'
 
-    zero_shot_plot(data_set=[(x, y)], filename=file, xlabel=xlabel)
+    zero_shot_plot(data_set=[(x, y)], filename=file, xlabel=None)
 
 def plot_tab3_single(x, y_list, legend_list, filename):
     data_set = []
@@ -167,11 +168,12 @@ def plot_tab3_MNP():
 def plot_fig5():
     # plt.style.use('ggplot')
 
-    labels = ["Java", "Python", "Go", "SC", "Haskell", "Kotlin", "PHP", "C#", "Fortran"]
+    labels = ["Java", "Python", "Go", "Solidity", "Haskell", "Kotlin", "PHP", "C#", "Fortran"]
     x = np.arange(len(labels))  # the label locations
     margin = 0.1
 
     y_labels = ["Java", "Go", "Python"]
+    y_color = ["#FAE3D9", "#BBDED6", "#8AC6D1"]
     width = (1. - 2. * margin) / len(y_labels)  # the width of the bars
     y_res = [
         [98.8, 91.6, 96.4, 79.8, 91.2, 96.8, 96.3, 96.6, 92.7],
@@ -186,7 +188,7 @@ def plot_fig5():
     # plt.setp(ax.xaxis.get_majorticklabels(), rotation=90)
     plt.grid(zorder=0)
     for idx, y in enumerate(y_res):
-        ax.bar(x + idx*width, y, width, label=y_labels[idx], zorder=50)
+        ax.bar(x + idx*width, y, width, label=y_labels[idx], zorder=50, color=y_color[idx])
 
     fontsize = 15
     ax.set_ylim([0.4, 1.05])
@@ -207,10 +209,61 @@ def plot_fig5():
 
     save_fig(fig, filename="fig5.png")
 
+def plot_rq2_CD():
+    x = [0, 32, 100, 300, 500, 700]
+    legend_list = ["Zecoler", "CodeBERT"]
+
+    SC_list = [
+        [79.8, 95.1, 95, 94.7, 93.9, 94.3],
+        [65.3, 75.1, 77.7, 81.9, 82.0, 83.0]
+    ]
+    Go_list = [
+        [96.4, 97.1, 97.7, 99.1, 98.1, 99],
+        [91.7, 89.2, 49.8, 50.3, 93.7, 94.1]
+    ]
+
+    plot_tab3_single(x, SC_list, legend_list, filename="cd_sc_rq2.png")
+    plot_tab3_single(x, Go_list, legend_list, filename="cd_go_rq2.png")
+
+def plot_rq2_CS():
+    x = [0, 32, 100, 300, 500, 700]
+    legend_list = ["Zecoler", "CodeBERT"]
+
+    SC_list = [
+        [67.1, 51, 75.8, 88.5, 91.1, 93.1],
+        [48.9, 49.9, 52.5, 55.8, 53.5, 53]
+    ]
+    Go_list = [
+        [80.3, 62.6, 51.6, 98.7, 99.6, 99.4],
+        [46.2, 51.4, 50.8, 49.5, 74.2, 65]
+    ]
+
+    plot_tab3_single(x, SC_list, legend_list, filename="cs_sc_rq2.png")
+    plot_tab3_single(x, Go_list, legend_list, filename="cs_go_rq2.png")
+
+def plot_rq2_MNP():
+    x = [0, 32, 100, 300, 500, 700]
+    legend_list = ["Zecoler", "CodeBERT"]
+
+    SC_list = [
+        [59.2, 56.4, 76.6, 87.7, 91.7, 91.8],
+        [52.1, 52.6, 63.5, 53.7, 58.7, 66.1]
+    ]
+    Go_list = [
+        [98.8, 56.7, 63.3, 98.9, 99.4, 99.3],
+        [65.2, 57.4, 64.6, 63.4, 74.8, 74.4]
+    ]
+
+    plot_tab3_single(x, SC_list, legend_list, filename="mnp_sc_rq2.png")
+    plot_tab3_single(x, Go_list, legend_list, filename="mnp_go_rq2.png")
+
 if __name__ == '__main__':
     # plot_tab3_CD()
     # plot_tab3_CS()
     # plot_tab3_MNP()
     # plot_fig3()
-    # plot_fig4()
-    plot_fig5()
+    plot_fig4()
+    plot_fig3()
+    # plot_rq2_CD()
+    # plot_rq2_CS()
+    # plot_rq2_MNP()

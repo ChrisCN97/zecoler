@@ -84,11 +84,16 @@ def ptuning_time_reader(task, output_name):
         print(re.search(r"\d+:\d+:\d+", f.readlines()[-2]).group())
 
 if __name__ == "__main__":
-    # get_output(method="finetune", task="clone_detection", name="Java_10000_b", from_server=S2)
-    # get_dataset(method="ptuning", task="clone_detection", lang="Java", size="7000", from_server=S2)
-    # plot_loss(folder="output/clone_detection/ptuning/Java_700_p_f/p1-i0", name="acc.npy")
-    # plot_loss(folder="output/clone_detection/finetune/Java_5000_rl", name="acc.npy")
     model_list = ["microsoft/codebert-base", "roberta-base", "huggingface/CodeBERTa-small-v1", "roberta-large"]
     task_list = ["clone_detection", "code_search", "name_predict"]
-    langs.append("SC")
-    log_format(task_list[0], "ptuning", "Go_5000", langs=langs)
+    # get_output(method="finetune", task=task_list[2], name="Java_5000", from_server=S2)
+    # get_dataset(method="ptuning", task="clone_detection", lang="Java", size="5000", from_server=S2)
+    # plot_loss(folder="output/clone_detection/ptuning/Java_700_p_f/p1-i0", name="acc.npy")
+    # plot_loss(folder="output/clone_detection/finetune/Java_5000_rl", name="acc.npy")
+    for task in task_list:
+        for lang in ["SC", "Go"]:
+            for size in [32, 100, 300, 500, 700]:
+                output = "Java_5000"
+                if task == task_list[0]:
+                    output += "_2"
+                log_format(task, "finetune", "{}_{}_{}".format(output, lang, size), langs=[lang])

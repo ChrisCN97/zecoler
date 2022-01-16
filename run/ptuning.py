@@ -155,16 +155,19 @@ def experiment_suit():
              "output": "Java_5000", "do_train": False, "zeroshot": True})
     gen_list(task_dicts, S1, check_data=False)
 
+def get_local_model_name(task, name):
+    return os.path.join("output", task, "ptuning", name, "p10-i0")
+
 if __name__ == "__main__":
     model_list = ["microsoft/codebert-base", "roberta-base"]
     task_dicts = []
     task_list = ["clone_detection", "code_search", "name_predict"]
-    task_dicts.append(
-        {"task_name": task_list[0], "lang": "Go", "size": 5000, "model": model_list[0],
-         "output": "Go_5000", "do_train": True, "zeroshot": False})
-    for lang in langs:
-        task_dicts.append(
-            {"task_name": task_list[0], "lang": lang, "size": 32, "model": model_list[0],
-             "output": "Go_5000", "do_train": False, "zeroshot": True})
+    for task in task_list:
+        for lang in ["SC", "Go"]:
+            for size in [32, 100, 300, 500, 700]:
+                task_dicts.append(
+                    {"task_name": task, "lang": lang, "size": size,
+                     "model": get_local_model_name(task_list[0], "Java_5000"),
+                     "output": "Java_5000_{}_{}".format(lang, size), "do_train": True, "zeroshot": False})
     gen_list(task_dicts, S1, check_data=False)
-    # s1 17740 output/clone_detection/ptuning/log/task_list.log 9:50
+    # s1 4880 output/clone_detection/ptuning/log/task_list.log 9:00

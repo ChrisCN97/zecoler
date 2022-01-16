@@ -477,7 +477,9 @@ def main():
     parser.add_argument("--do_eval", action='store_true',
                         help="Whether to run eval on the dev set.")
     parser.add_argument("--do_test", action='store_true',
-                        help="Whether to run eval on the dev set.")
+                        help="Whether to run test on the test set.")
+    parser.add_argument("--do_target_train", action='store_true',
+                        help="Whether to run target train on the train set.")
     parser.add_argument("--train_batch_size", default=4, type=int,
                         help="Batch size per GPU/CPU for training.")
     parser.add_argument("--eval_batch_size", default=4, type=int,
@@ -488,6 +490,8 @@ def main():
                         help="If > 0: set total number of training steps to perform. Override num_train_epochs.")
     parser.add_argument("--freeze_plm", action='store_true',
                         help="Whether to freeze plm.")
+    parser.add_argument("--target_output_dir", default=None, type=str,
+                        help="The target output directory where the model predictions and checkpoints will be written.")
 
     parser.add_argument("--model_type", default="bert", type=str,
                         help="The model architecture to be fine-tuned.")
@@ -648,6 +652,28 @@ def main():
             torch.distributed.barrier()
 
         global_step, tr_loss = train(args, train_dataset, model, tokenizer,pool)
+
+    # Target Training
+    if args.do_target_train:
+        if args.local_rank not in [-1, 0]:
+            torch.distributed.barrier()  # Barrier to make sure only the first process in distributed training process the dataset, and the others will use the cache
+
+        train_dataset = load_and_cache_examples(args, tokenizer, evaluate=False, pool=pool)
+
+        if args.local_rank == 0:
+            torch.distributed.barrier()
+
+        checkpoint_prefix = 'checkpoint-best-f1/model.bin'
+        output_dir = os.path.join(args.output_dir, '{}'.format(checkpoint_prefix))
+        model.load_state_dict(torch.load(output_dir))
+        model.to(args.device)
+
+        if not os.path.exists(args.target_output_dir):
+            os.makedirs(args.target_output_dir)
+
+        args.output_dir = args.target_output_dir
+
+        global_step, tr_loss = train(args, train_dataset, model, tokenizer, pool)
 
 
     # Evaluation

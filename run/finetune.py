@@ -29,14 +29,16 @@ def finetune(
         output="Java_32",
         do_train=True,
         freeze_plm=False,
-        train_batch=6,
+        train_batch=10,
         epoch=20,
         eval_step=100,
         learning_rate=1e-5,
         do_test=True,
         env=S2,
         is_part=False,
-        nohup=False
+        nohup=False,
+        target_output_dir="Java_32",
+        do_target_train=False
 ):
     cmd = "python ../method/finetune/code/run.py " \
           "--block_size 250 " \
@@ -62,10 +64,13 @@ def finetune(
         os.makedirs(log_path)
     log = "{}/{}.log".format(log_path, lang)
     output = "output/{}/finetune/{}".format(task_name, output)
-    if do_test and \
+    if (do_test or do_target_train) and \
             (not os.path.exists(output) or not os.listdir(output)):
         print("Lack of {} for zero shot".format(output))
     cmd += "--output_dir {} ".format(output)
+    if target_output_dir is not None:
+        target_output = "output/{}/finetune/{}".format(task_name, target_output_dir)
+        cmd += "--target_output_dir {} ".format(target_output)
     if freeze_plm:
         cmd += "--freeze_plm "
     cmd += "--train_batch_size {} ".format(train_batch)
@@ -73,6 +78,9 @@ def finetune(
     cmd += "--learning_rate {} ".format(learning_rate)
     if do_train:
         cmd += "--do_train "
+        cmd += "--save_steps {} ".format(eval_step)
+    if do_target_train:
+        cmd += "--do_target_train "
         cmd += "--save_steps {} ".format(eval_step)
     if do_test:
         cmd += "--do_eval "
@@ -82,7 +90,7 @@ def finetune(
         cmd += "-a {}/test.txt ".format(data_dir)
         cmd += "-p {}/pre_{}.txt ".format(output, lang)
         cmd += "-o {}".format(log)
-    if do_train:
+    if do_train or do_target_train:
         print(output)
     if is_part:
         return cmd
@@ -100,6 +108,9 @@ def gen_list(task_dicts, env, check_data=False):
     for task in task_dicts:
         task["epoch"] = train_config[task["size"]][0]
         task["eval_step"] = train_config[task["size"]][1]
+        if "target_output_dir" not in task:
+            task["target_output_dir"] = None
+            task["do_target_train"] = False
         c = finetune(
             config_name=task["model"],
             model_name_or_path=task["model"],
@@ -112,9 +123,12 @@ def gen_list(task_dicts, env, check_data=False):
             do_train=task["do_train"],
             do_test=task["do_test"],
             env=env,
-            is_part=True)
+            is_part=True,
+            target_output_dir=task["target_output_dir"],
+            do_target_train=task["do_target_train"]
+        )
         cmd += c + "\n"
-        if task["do_train"]:
+        if task["do_train"] or task["do_target_train"]:
             if task["size"] == "test":
                 pre_time += 0
             else:
@@ -133,16 +147,30 @@ def gen_list(task_dicts, env, check_data=False):
     h, m = divmod(pre_time, 60)
     print("%dh %02dmin" % (h, m))
 
+def get_local_model_name(task, name):
+    return os.path.join("output", task, "finetue", name)
+
 if __name__ == "__main__":
     # need test source domain
     task_dicts = []
     model_list = ["microsoft/codebert-base", "roberta-base", "huggingface/CodeBERTa-small-v1", "roberta-large"]
     task_list = ["clone_detection", "code_search", "name_predict"]
     for task in task_list:
-        task_dicts.append({"task_name": task, "lang": "Go", "size": 700, "model": model_list[0],
-                           "output": "Go_700", "do_train": True, "do_test": False})
-        task_dicts.append({"task_name": task, "lang": "Go", "size": 700, "model": model_list[0],
-                           "output": "Go_700", "do_train": False, "do_test": True})
+        if task in task_list[1:]:
+            task_dicts.append({"task_name": task, "lang": "Java", "size": 5000, "model": model_list[0],
+                               "output": "Java_5000", "do_train": True, "do_test": False})
+            task_dicts.append({"task_name": task, "lang": "Java", "size": 5000, "model": model_list[0],
+                               "output": "Java_5000", "do_train": False, "do_test": True})
+        for lang in ["SC", "Go"]:
+            for size in [32, 100, 300, 500, 700]:
+                output = "Java_5000"
+                if task == task_list[0]:
+                    output += "_2"
+                task_dicts.append({"task_name": task, "lang": lang, "size": size, "model": model_list[0],
+                                   "output": output, "do_train": False, "do_test": False,
+                                   "do_target_train": True, "target_output_dir": "{}_{}_{}".format(output, lang, size)})
+                task_dicts.append({"task_name": task, "lang": lang, "size": size, "model": model_list[0],
+                                   "output": "{}_{}_{}".format(output, lang, size), "do_train": False, "do_test": True})
     gen_list(task_dicts, S1, check_data=False)
-    # s1 15672 output/clone_detection/finetune/log/task_list.log 11:30
+    # s1 30967 output/clone_detection/finetune/log/task_list.log
 
