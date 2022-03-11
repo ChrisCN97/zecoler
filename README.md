@@ -1,4 +1,4 @@
-# Zeroshot
+# Zecoler
 
 The code implement of paper "Zero-Shot Program Representation Learning".
 
