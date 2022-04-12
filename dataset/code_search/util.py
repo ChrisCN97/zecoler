@@ -95,8 +95,8 @@ def get_clear_folder(lang):
     os.makedirs(lang)
     return lang
 
-def gen_data_jsonl(data_jsonl_list, folder):
-    jsonl_path = os.path.join(folder, "data.jsonl")
+def gen_data_jsonl(data_jsonl_list, folder, targetDataJSON="data.jsonl"):
+    jsonl_path = os.path.join(folder, targetDataJSON)
     with open(jsonl_path, 'w') as f:
         for item in data_jsonl_list:
             f.write(json.dumps(item) + "\n")
@@ -278,14 +278,44 @@ def process_CSN():
     os.system("rm {}/temp_1400.txt".format(lang))
     os.system("mv {0}/{1} {0}/train.txt".format(lang, train_txt))
 
+def get_api2doc(lang, apiFile):
+    api_to_doc = {}
+    with open(os.path.join(lang, apiFile)) as f:
+        for line in f:
+            line = line.strip().split()
+            api_to_doc[line[0]] = line[0] + " " + " ".join(line[1:])
+    return api_to_doc
+
+
+def addApiInfo(code, api_to_doc):
+    for api, doc in api_to_doc.items():
+        code = code.replace(api, doc)
+    return code
+
+
+def addApiInfoForList(lang, sourceNameList, targetDataJSON="data_api.jsonl", apiFile="api2doc.txt"):
+    url_to_code = get_url2code(lang)
+    api_to_doc = get_api2doc(lang, apiFile)
+
+    for sourceName in sourceNameList:
+        with open(os.path.join(lang, sourceName+".txt"), 'r') as f:
+            for line in f:
+                line = line.strip().split()
+                url_to_code[line[1]] = addApiInfo(url_to_code[line[1]], api_to_doc)
+
+    data_jsonl_list = []
+    for idx, code in url_to_code.items():
+        data_jsonl_list.append({"func": code, "idx": idx})
+    gen_data_jsonl(data_jsonl_list, "Java", targetDataJSON)
 
 if __name__ == "__main__":
     # get_qualified_prob_list()
     # lang = "Java"
-    for size in [5000]:
-        gen_train(lang="Go", size=size)
+    # for size in [5000]:
+    #     gen_train(lang="Go", size=size)
     # langs = ["Java", "Python", "JavaScript", "PHP", "Ruby", "Go", "C#", "C++", "C", "Haskell", "Kotlin", "Fortran"]
     # for lang in langs:
     #     gen_train(lang, size=32)
     # check_trainrepeat_pnrate(lang="SC", name="train.txt")
-    # check_example(lang="SC", name="train.txt")
+    # check_example(lang="Java", name="train_100.txt")
+    addApiInfoForList("Java", ["train_1000", "dev_400", "test_1000"])

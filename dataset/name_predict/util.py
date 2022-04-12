@@ -75,8 +75,8 @@ def get_clear_folder(lang):
     return lang
 
 
-def gen_data_jsonl(data_jsonl_list, folder):
-    jsonl_path = os.path.join(folder, "data.jsonl")
+def gen_data_jsonl(data_jsonl_list, folder, targetDataJSON="data.jsonl"):
+    jsonl_path = os.path.join(folder, targetDataJSON)
     with open(jsonl_path, 'w') as f:
         for item in data_jsonl_list:
             f.write(json.dumps(item) + "\n")
@@ -144,10 +144,41 @@ def get_url2code(lang, name='data.jsonl'):
             url_to_code[js['idx']] = js['func']
     return url_to_code
 
+def get_api2doc(lang, apiFile):
+    api_to_doc = {}
+    with open(os.path.join(lang, apiFile)) as f:
+        for line in f:
+            line = line.strip().split()
+            api_to_doc[line[0]] = line[0] + " " + " ".join(line[1:])
+    return api_to_doc
+
+
+def addApiInfo(code, api_to_doc):
+    for api, doc in api_to_doc.items():
+        code = code.replace(api, doc)
+    return code
+
+
+def addApiInfoForList(lang, sourceNameList, targetDataJSON="data_api.jsonl", apiFile="api2doc.txt"):
+    url_to_code = get_url2code(lang)
+    api_to_doc = get_api2doc(lang, apiFile)
+
+    for sourceName in sourceNameList:
+        with open(os.path.join(lang, sourceName+".txt"), 'r') as f:
+            for line in f:
+                line = line.strip().split()
+                url_to_code[line[1]] = addApiInfo(url_to_code[line[1]], api_to_doc)
+
+    data_jsonl_list = []
+    for idx, code in url_to_code.items():
+        data_jsonl_list.append({"func": code, "idx": idx})
+    gen_data_jsonl(data_jsonl_list, "Java", targetDataJSON)
+
 if __name__ == "__main__":
     # check_example(lang="Java", name="train.txt")
     # for lang, folder in [("python", "Python"), ("go", "Go"), ("javascript", "JavaScript")]:
     #     gen_dataset(lang, folder, min_code_len=800, max_code_len=1000)
-    for size in [5000]:
-        gen_train(lang="Go", size=size)
+    # for size in [5000]:
+    #     gen_train(lang="Go", size=size)
     # gen_dataset(lang="javascript", folder="JavaScript", min_code_len=700, max_code_len=900)
+    addApiInfoForList("Java", ["train_100", "dev_400", "test_1000"])

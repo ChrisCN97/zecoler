@@ -67,7 +67,7 @@ def plot_fig3():
 def plot_fig4():
     x = ['head',
          'middle',
-         'evenly',
+         'uniformly',
          'tail'
          ]
 
@@ -263,7 +263,7 @@ if __name__ == '__main__':
     # plot_tab3_MNP()
     # plot_fig3()
     plot_fig4()
-    plot_fig3()
+    # plot_fig3()
     # plot_rq2_CD()
     # plot_rq2_CS()
     # plot_rq2_MNP()

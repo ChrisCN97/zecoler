@@ -98,8 +98,8 @@ def gen_pair(dataset_list, repeat_check_set, data_jsonl_list, repeat_data_set, c
         repeat_data_set.add(code2[0])
     return True
 
-def gen_data_jsonl(data_jsonl_list, folder):
-    jsonl_path = os.path.join(folder, "data.jsonl")
+def gen_data_jsonl(data_jsonl_list, folder, targetDataJSON="data.jsonl"):
+    jsonl_path = os.path.join(folder, targetDataJSON)
     with open(jsonl_path, 'w') as f:
         for item in data_jsonl_list:
             f.write(json.dumps(item) + "\n")
@@ -319,6 +319,38 @@ def process_BCBs():
     os.system("rm {}/temp_1400.txt".format(lang))
     os.system("mv {0}/{1} {0}/train.txt".format(lang, train_txt))
 
+
+def get_api2doc(lang, apiFile):
+    api_to_doc = {}
+    with open(os.path.join(lang, apiFile)) as f:
+        for line in f:
+            line = line.strip().split()
+            api_to_doc[line[0]] = line[0] + " " + " ".join(line[1:])
+    return api_to_doc
+
+
+def addApiInfo(code, api_to_doc):
+    for api, doc in api_to_doc.items():
+        code = code.replace(api, doc)
+    return code
+
+
+def addApiInfoForList(lang, sourceNameList, targetDataJSON="data_api.jsonl", apiFile="api2doc.txt"):
+    url_to_code = get_url2code(lang)
+    api_to_doc = get_api2doc(lang, apiFile)
+
+    for sourceName in sourceNameList:
+        with open(os.path.join(lang, sourceName+".txt"), 'r') as f:
+            for line in f:
+                line = line.strip().split()
+                url_to_code[line[0]] = addApiInfo(url_to_code[line[0]], api_to_doc)
+                url_to_code[line[1]] = addApiInfo(url_to_code[line[1]], api_to_doc)
+
+    data_jsonl_list = []
+    for idx, code in url_to_code.items():
+        data_jsonl_list.append({"func": code, "idx": idx})
+    gen_data_jsonl(data_jsonl_list, "Java", targetDataJSON)
+
 if __name__ == '__main__':
     MIN_SIZE = 690
     langs_need = ["Java", "Python", "C++"]
@@ -334,9 +366,10 @@ if __name__ == '__main__':
     #          'Kotlin', 'Lua', 'Erlang', 'Standard ML', 'Bf', 'Prolog', 'Crystal', 'Nim', 'Ruby', 'D', 'Pascal', 'Forth',
     #          'Go', 'C++', 'Cython', 'Bash']
 
-    # for size in [5000]:
+    # for size in [300]:
     #     gen_train(lang="Go", size=size)
     # process_BCBs()
     # check_trainrepeat_pnrate(lang, name="train_5000.txt")
-    check_example(lang="SC", name="train.txt")
+    # check_example(lang="Java", name="train_100.txt")
     # get_data_list(level=1, lang="SC")
+    addApiInfoForList("Java", ["train_100", "dev_400", "test_1000"])

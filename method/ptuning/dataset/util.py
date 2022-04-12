@@ -45,11 +45,14 @@ def change_format(source, target, url_to_code, idx):
             f.write(json.dumps(item) + "\n")
     return idx
 
-def gen_dataset(lang, size):
+def gen_dataset(lang, size, suffix="", dataJSON=""):
     size = str(size)
     lang_folder = os.path.join(TARGET_PATH, lang)
-    folder = get_clear_folder(os.path.join(lang_folder, size))
-    url_to_code = get_url2code(lang)
+    folder = get_clear_folder(os.path.join(lang_folder, size) + suffix)
+    if dataJSON == "":
+        url_to_code = get_url2code(lang)
+    else:
+        url_to_code = get_url2code(lang, dataJSON)
     idx = 0
     source = os.path.join(SOURCE_PATH, lang, "{}{}.txt".format(TRAIN_PREFIX, size))
     if not os.path.exists(source):
@@ -87,11 +90,12 @@ def gen_test():
 
 if __name__ == "__main__":
     task_list = ["clone_detection", "code_search", "name_predict"]
-    TARGET_PATH = task_list[0]
+    TARGET_PATH = task_list[1]
     SOURCE_PATH = os.path.join(SOURCE_PATH, TARGET_PATH)
 
     # for task in task_list:
     #     TARGET_PATH = task
     #     for size in [500]:
     #         gen_dataset(lang="Go", size=str(size))
-    gen_dataset(lang="Go", size=str(5000))
+    # gen_dataset(lang="Go", size=str(5000))
+    gen_dataset(lang="Java", size=str(1000), suffix="_api", dataJSON="data_api.jsonl")

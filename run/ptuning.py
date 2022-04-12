@@ -35,7 +35,7 @@ def ptuning(
         eval_step=50,
         pet_repetitions=1,
         zeroshot=False,
-        show_limit=0,
+        show_limit=5,
         env=S2,
         is_part=False,
         nohup=False
@@ -99,8 +99,10 @@ def gen_list(task_dicts, env, check_data=False):
             task["pattern_ids"] = 10
         if "freeze_plm" not in task:
             task["freeze_plm"] = False
-        task["max_step"] = train_config[task["size"]][0]
-        task["eval_step"] = train_config[task["size"]][1]
+        if "max_step" not in task:
+            task["max_step"] = train_config[task["size"]][0]
+        if "eval_step" not in task:
+            task["eval_step"] = train_config[task["size"]][1]
         c = ptuning(
             model_name_or_path=task["model"],
             task_name=task["task_name"],
@@ -162,12 +164,13 @@ if __name__ == "__main__":
     model_list = ["microsoft/codebert-base", "roberta-base"]
     task_dicts = []
     task_list = ["clone_detection", "code_search", "name_predict"]
-    for task in task_list:
-        for lang in ["SC", "Go"]:
-            for size in [32, 100, 300, 500, 700]:
-                task_dicts.append(
-                    {"task_name": task, "lang": lang, "size": size,
-                     "model": get_local_model_name(task_list[0], "Java_5000"),
-                     "output": "Java_5000_{}_{}".format(lang, size), "do_train": True, "zeroshot": False})
-    gen_list(task_dicts, S1, check_data=False)
-    # s1 4880 output/clone_detection/ptuning/log/task_list.log 9:00
+    # for size in ["1000", "1000_api"]:
+    #     task_dicts.append(
+    #         {"task_name": task_list[1], "lang": "Java", "size": size,
+    #          "model": model_list[0], "max_step": 2000, "eval_step": 100,
+    #          "output": "Java_{}".format(size), "do_train": True, "zeroshot": False})
+    task_dicts.append(
+        {"task_name": task_list[0], "lang": "Java", "size": "test",
+         "model": model_list[0], "output": "Java_test", "do_train": True, "zeroshot": False})
+    gen_list(task_dicts, S2, check_data=False)
+    # s3 427755 output/code_search/ptuning/log/task_list.log 10:00
