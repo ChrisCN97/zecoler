@@ -204,8 +204,8 @@ def get_url2code(lang, name='data.jsonl'):
             url_to_code[js['idx']] = js['func']
     return url_to_code
 
-def check_example(lang, name):
-    url_to_code = get_url2code(lang)
+def check_example(lang, name, map_name='data.jsonl'):
+    url_to_code = get_url2code(lang, map_name)
     with open(os.path.join(lang, name)) as f:
         sample_list = random.choice(f.readlines()[:100]).split()
     print("*"*20)
@@ -351,6 +351,37 @@ def addApiInfoForList(lang, sourceNameList, targetDataJSON="data_api.jsonl", api
         data_jsonl_list.append({"func": code, "idx": idx})
     gen_data_jsonl(data_jsonl_list, "Java", targetDataJSON)
 
+def get_remove_symbol(lang, apiFile):
+    sym_list = []
+    with open(os.path.join(lang, apiFile)) as f:
+        for line in f:
+            sym_list.append(line.strip())
+    return sym_list
+
+
+def symbol_process(code, sym_list):
+    for symbol in sym_list:
+        code = code.replace(symbol, " ")
+        code = " ".join(code.split())
+    return code
+
+
+def remove_symbol_for_list(lang, source_name_list, target_data_JSON="data_wo_symbol.jsonl", file="remove_symbol.txt"):
+    url_to_code = get_url2code(lang)
+    sym_list = get_remove_symbol(lang, file)
+
+    for source_name in source_name_list:
+        with open(os.path.join(lang, source_name+".txt"), 'r') as f:
+            for line in f:
+                line = line.strip().split()
+                url_to_code[line[0]] = symbol_process(url_to_code[line[0]], sym_list)
+                url_to_code[line[1]] = symbol_process(url_to_code[line[1]], sym_list)
+
+    data_jsonl_list = []
+    for idx, code in url_to_code.items():
+        data_jsonl_list.append({"func": code, "idx": idx})
+    gen_data_jsonl(data_jsonl_list, "Java", target_data_JSON)
+
 if __name__ == '__main__':
     MIN_SIZE = 690
     langs_need = ["Java", "Python", "C++"]
@@ -370,6 +401,7 @@ if __name__ == '__main__':
     #     gen_train(lang="Go", size=size)
     # process_BCBs()
     # check_trainrepeat_pnrate(lang, name="train_5000.txt")
-    # check_example(lang="Java", name="train_100.txt")
     # get_data_list(level=1, lang="SC")
-    addApiInfoForList("Java", ["train_100", "dev_400", "test_1000"])
+    # addApiInfoForList("Java", ["train_100", "dev_400", "test_1000"])
+    # remove_symbol_for_list("Java", ["train_100", "dev_400", "test_1000"])
+    check_example(lang="Java", name="train_100.txt", map_name="data_wo_symbol.jsonl")

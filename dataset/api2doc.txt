@@ -1,0 +1,8 @@
+[] array
+toCharArray Converts this string to a new character array
+Math.max Returns the greater of two values
+indexOf Returns the index within this string of the first occurrence of the specified character
+substring Returns a new string that is a substring of this string
+Math.floor Returns the largest double value that is less than or equal to the argument and is equal to a mathematical integer
+setScale Returns a BigDecimal whose scale is the specified value
+Math.sqrt Returns the correctly rounded positive square root of a double value

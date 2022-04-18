@@ -90,7 +90,7 @@ def gen_test():
 
 if __name__ == "__main__":
     task_list = ["clone_detection", "code_search", "name_predict"]
-    TARGET_PATH = task_list[1]
+    TARGET_PATH = task_list[0]
     SOURCE_PATH = os.path.join(SOURCE_PATH, TARGET_PATH)
 
     # for task in task_list:
@@ -98,4 +98,4 @@ if __name__ == "__main__":
     #     for size in [500]:
     #         gen_dataset(lang="Go", size=str(size))
     # gen_dataset(lang="Go", size=str(5000))
-    gen_dataset(lang="Java", size=str(1000), suffix="_api", dataJSON="data_api.jsonl")
+    gen_dataset(lang="Java", size=str(100), suffix="_wosym", dataJSON="data_wo_symbol.jsonl")
