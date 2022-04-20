@@ -170,7 +170,7 @@ if __name__ == "__main__":
     #          "model": model_list[0], "max_step": 2000, "eval_step": 100,
     #          "output": "Java_{}".format(size), "do_train": True, "zeroshot": False})
     task_dicts.append(
-        {"task_name": task_list[0], "lang": "Java", "size": "100_wosym", "max_step": 1000, "eval_step": 100,
-         "model": model_list[0], "output": "Java_test", "do_train": True, "zeroshot": False})
-    gen_list(task_dicts, S2, check_data=False)
-    # s2 17489 output/clone_detection/ptuning/log/task_list.log 10:00
+        {"task_name": task_list[2], "lang": "Java", "size": "100_wosym", "max_step": 1000, "eval_step": 100,
+         "model": model_list[0], "output": "Java_100_wosym", "do_train": True, "zeroshot": False})
+    gen_list(task_dicts, S3, check_data=False)
+    # s3 471698 output/name_predict/ptuning/log/task_list.log 10:00

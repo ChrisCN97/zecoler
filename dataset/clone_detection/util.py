@@ -403,5 +403,5 @@ if __name__ == '__main__':
     # check_trainrepeat_pnrate(lang, name="train_5000.txt")
     # get_data_list(level=1, lang="SC")
     # addApiInfoForList("Java", ["train_100", "dev_400", "test_1000"])
-    # remove_symbol_for_list("Java", ["train_100", "dev_400", "test_1000"])
+    remove_symbol_for_list("Java", ["train_100", "dev_400", "test_1000"])
     check_example(lang="Java", name="train_100.txt", map_name="data_wo_symbol.jsonl")
