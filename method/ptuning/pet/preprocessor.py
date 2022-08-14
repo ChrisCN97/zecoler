@@ -48,7 +48,7 @@ class MLMPreprocessor(Preprocessor):
     def get_input_features(self, example: InputExample, labelled: bool, priming: bool = False,
                            **kwargs) -> InputFeatures:
 
-        input_ids, token_type_ids, block_flag = self.pvp.encode(example)  # get block_flag
+        input_ids, token_type_ids, block_flag = self.pvp.encode(example)  # todo cuinan: get block_flag
 
         attention_mask = [1] * len(input_ids)
         padding_length = self.wrapper.config.max_seq_length - len(input_ids)

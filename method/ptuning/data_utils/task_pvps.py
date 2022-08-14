@@ -577,7 +577,7 @@ class WicPVP(PVP):
     def verbalize(self, label) -> List[str]:
         return WicPVP.VERBALIZER[label]
 
-
+# todo cuinan: prompt template
 class CloneDetPVP(PVP):
     VERBALIZER_A = {
         "False": ["No"],

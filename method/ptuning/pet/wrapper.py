@@ -272,7 +272,7 @@ class TransformerModelWrapper:
         """
 
         train_batch_size = per_gpu_train_batch_size * max(1, n_gpu)  # bz * n_gpu
-        train_dataset = self._generate_dataset(train_data, show_limit=show_limit)  # 规定prompt位置
+        train_dataset = self._generate_dataset(train_data, show_limit=show_limit)  # todo cuinan: 规定prompt位置
         train_sampler = RandomSampler(train_dataset)
         train_dataloader = DataLoader(train_dataset, sampler=train_sampler, batch_size=train_batch_size)
 
@@ -567,7 +567,7 @@ class TransformerModelWrapper:
 
 
     def _generate_dataset(self, data: List[InputExample], labelled: bool = True, show_limit: int = 0):
-        features = self._convert_examples_to_features(data, labelled=labelled, show_limit=show_limit)  # build prompt
+        features = self._convert_examples_to_features(data, labelled=labelled, show_limit=show_limit)  # todo cuinan: build prompt
         feature_dict = {
             'input_ids': torch.tensor([f.input_ids for f in features], dtype=torch.long),
             'attention_mask': torch.tensor([f.attention_mask for f in features], dtype=torch.long),
@@ -589,7 +589,7 @@ class TransformerModelWrapper:
         for (ex_index, example) in enumerate(examples):
             # if ex_index % 10000 == 0:
             #     logger.info("Writing example {}".format(ex_index))
-            input_features = self.preprocessor.get_input_features(example, labelled=labelled)  # build prompt
+            input_features = self.preprocessor.get_input_features(example, labelled=labelled)  # todo cuinan: build prompt
             if self.task_helper:
                 self.task_helper.add_special_input_features(example, input_features)
             features.append(input_features)
