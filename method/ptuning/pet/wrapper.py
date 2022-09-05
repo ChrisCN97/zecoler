@@ -381,7 +381,7 @@ class TransformerModelWrapper:
 
                 loss = self.task_helper.train_step(batch) if self.task_helper else None
                 if loss is None:
-                    loss = TRAIN_STEP_FUNCTIONS[MLM_WRAPPER](self)(batch)
+                    loss = TRAIN_STEP_FUNCTIONS[MLM_WRAPPER](self)(batch)  # todo cuinan: train step
 
                 if n_gpu > 1:
                     loss = loss.mean()  # mean() to average on multi-gpu parallel training
@@ -618,6 +618,7 @@ class TransformerModelWrapper:
             torch.LongTensor(list(range(model.prompt_length))).cuda())
         replace_embeds = replace_embeds.unsqueeze(0) # [batch_size, prompt_length, embed_size]
 
+        # todo cuinan: replace prompt
         if self.config.prompt_encoder_type == "lstm":
             replace_embeds = model.lstm_head(replace_embeds)[0]  # [batch_size, seq_len, 2 * hidden_dim]
             if model.prompt_length == 1:
