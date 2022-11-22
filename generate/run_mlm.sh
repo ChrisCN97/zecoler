@@ -1,0 +1,11 @@
+python run_mlm.py \
+    --model_name_or_path microsoft/codebert-base \
+    --train_file "/mnt/sda/cn/codet5/data/pretrain/with_lang/v1/train.txt" \
+    --validation_file "/mnt/sda/cn/codet5/data/pretrain/with_lang/v1/val.txt" \
+	--line_by_line \
+    --per_device_train_batch_size 8 \
+    --per_device_eval_batch_size 8 \
+    --do_train \
+    --do_eval \
+    --output_dir pretrain/codebert-with-lang-v1 \
+	--overwrite_output_dir

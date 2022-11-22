@@ -348,5 +348,5 @@ if __name__ == "__main__":
     #     gen_train(lang, size=32)
     # check_trainrepeat_pnrate(lang="SC", name="train.txt")
     # addApiInfoForList("Java", ["train_1000", "dev_400", "test_1000"])
-    remove_symbol_for_list("Java", ["train_100", "train_1000", "dev_400", "test_1000"])
+    # remove_symbol_for_list("Java", ["train_100", "train_1000", "dev_400", "test_1000"])
     check_example(lang="Java", name="train_100.txt", map_name="data_wo_symbol.jsonl")
