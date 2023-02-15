@@ -1,31 +1,11 @@
 # Zecoler
 
-The code implement of paper "Zero-Shot Code Representation Learning for Program Understanding and Generation".
+The code implement of paper "Zero-Shot Code Representation Learning via Prompt Tuning".
 
 
 ## Abstract
 
-Learning program representations has been the core prerequisite of
-code understanding and generation tasks (e.g., code search and code summa-
-rization). The state-of-the-art pre-trained models such as CodeBERT require the
-availability of large-scale code corpora. However, gathering training samples can
-be costly and infeasible for domain-specific languages such as Solidity for smart
-contracts or the scenario where downstream tasks need to be solved in specific
-project. In this paper, we propose Zecoler, a zero-shot learning approach for code
-representations. Zecoler is built upon a pre-trained programming language model.
-In order to elicit knowledge from the pre-trained models efficiently, Zecoler casts
-the downstream tasks to the same form of pre-training tasks by inserting trainable
-prompts into the original input. These prompts will guide PLM to generate better
-output just like human tells machine what to do. Then, it employs the prompt
-learning technique to optimize the pre-trained model and search for the most suit-
-able continuous prompts automatically. This enables the representation model to
-efficiently fit the downstream tasks through the dataset in source language domain
-and then reuse pre-trained and continuous trained knowledge in PLM for target
-language domain in zero-shot style. We evaluate Zecoler in three code understand-
-ing and two generation tasks in multiple programming languages that have no
-training samples, e.g., Solidity and Go, with model trained in corpora of common
-languages such as Java. Experimental results show that our approach significantly
-outperforms baseline models under both zero-shot and few-shot settings.
+Learning code representations has been the core prerequisite of of many software engineering tasks such as code clone detection and code generation. The state-of-the-art pre-trained language models (PLMs) such as CodeBERT require an amount of downstream data for fine-tuning. However, gathering training sam- ples can be prohibitively expensive and impractical for domain-specific languages or project-specific tasks. Besides, pre-training and downstream tasks are usually heterogeneous, which make it hard to fully explore the knowledge learned during pre-training. In this paper, we propose Zecoler, a zero-shot approach for learning code representations. Zecoler is built upon a pre-trained programming language model. In order to elicit knowledge from the PLMs efficiently, Zecoler casts the downstream tasks to the same form of pre-training objectives by inserting train- able prompts into the original input. These prompts can guide PLMs on how to generate better results. Subsequently, we employ the prompt tuning technique to search for the optimal prompts for PLMs automatically. This enables the repre- sentation model to efficiently fit the downstream tasks through fine-tuning on the dataset in source language domain and then reuse the pre-trained knowledge for the target domain in a zero-shot style. We evaluate Zecoler in five code intelli- gence tasks including code clone detection, code search, method name prediction, code summarization, and code generation. We experiment in multiple program- ming languages without giving labeled samples, e.g., Solidity and Go, with model trained in corpora of common languages such as Java. The results show that our approach significantly outperforms baseline models under the zero-shot setting. For example, the accuracy of code search is improved by 30% compared to fine- tuning. In addition, qualitative analysis demonstrates its superior generalizability under both cross-lingual and monolingual few-shot settings.
 
 ## Structure
 
